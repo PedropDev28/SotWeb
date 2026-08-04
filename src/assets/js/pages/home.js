@@ -12,15 +12,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).join('');
   }
 
-  const newsMount = document.getElementById('home-news');
-  if (newsMount) {
+  async function renderNews() {
+    const newsMount = document.getElementById('home-news');
+    if (!newsMount) return;
     try {
+      window.SOTNews?.clearCache?.();
+      window.SOTNews?.syncOfficialHubLinks?.();
       const news = await SOTNews.loadNews();
       newsMount.innerHTML = news.map((item) => SOTNews.renderNewsItem(item)).join('');
     } catch {
       newsMount.innerHTML = `<div class="empty-state">${t('home.newsError')}</div>`;
     }
   }
+
+  await renderNews();
+  window.addEventListener('sot:localechange', () => {
+    renderNews();
+  });
 
   const mount = document.getElementById('home-guides');
   if (!mount) return;

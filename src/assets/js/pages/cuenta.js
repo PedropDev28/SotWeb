@@ -139,18 +139,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
   }
 
+  function groupStats(stats) {
+    const map = new Map();
+    (stats || []).forEach((s) => {
+      const g = s.group || 'other';
+      if (!map.has(g)) {
+        map.set(g, {
+          id: g,
+          title: locale === 'en' ? s.groupEn || g : s.groupEs || g,
+          items: [],
+        });
+      }
+      map.get(g).items.push(s);
+    });
+    return [...map.values()];
+  }
+
   function renderPirateCard(entry) {
     const p = entry.profile;
     const name = p.gamertag || session.name;
     const title = p.title || t('sot.noTitle');
     const synced = SOTPirate.relativeTime(entry.syncedAt, locale);
     const canRefresh = !!SOTPirate.getSessionRat(session.id);
+    const statGroups = groupStats(p.stats);
+    const featuredKeys = new Set([
+      'Combat_Ships_Sunk',
+      'Combat_Kraken_Defeated',
+      'Player_TinyShark_Spawned',
+      'Chests_HandedIn_Total',
+      'Voyages_MetresSailed_Total',
+      'Vomited_Total',
+    ]);
+    const featured = (p.stats || []).filter((s) => featuredKeys.has(s.key)).slice(0, 6);
 
     const companies = (p.companies || [])
       .map((c) => {
         const pct = c.progress != null ? Math.max(0, Math.min(100, c.progress)) : 0;
         const level =
           c.level != null ? `${t('sot.level')} ${c.level}` : t('sot.noLevel');
+        const extras = [];
+        if (c.titlesTotal != null) {
+          extras.push(`${c.titlesUnlocked ?? 0}/${c.titlesTotal} ${t('sot.titles')}`);
+        }
+        if (c.itemsTotal != null) {
+          extras.push(`${c.itemsUnlocked ?? 0}/${c.itemsTotal} ${t('sot.items')}`);
+        }
         return `
           <div class="pirate-company">
             <div class="pirate-company-top">
@@ -174,12 +207,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                   : ''
               }
             </div>
+            ${
+              extras.length
+                ? `<p class="pirate-company-extras">${esc(extras.join(' · '))}</p>`
+                : ''
+            }
           </div>
         `;
       })
       .join('');
 
-    const combat = (p.stats || [])
+    const featuredHtml = featured
       .map(
         (s) => `
         <div class="stat">
@@ -189,6 +227,91 @@ document.addEventListener('DOMContentLoaded', async () => {
       `
       )
       .join('');
+
+    const allStatsHtml = statGroups
+      .map((group) => {
+        const cards = group.items
+          .map(
+            (s) => `
+            <div class="stat">
+              <strong>${esc(SOTPirate.formatNumber(s.value, locale))}</strong>
+              <span>${esc(SOTPirate.statLabel(s, locale))}</span>
+            </div>
+          `
+          )
+          .join('');
+        return `
+          <div class="pirate-stat-group">
+            <h4>${esc(group.title)} <small>(${group.items.length})</small></h4>
+            <div class="stat-row pirate-stat-row">${cards}</div>
+          </div>
+        `;
+      })
+      .join('');
+
+    const alignments = p.captaincy?.pirateAlignments || [];
+    const milestonesHtml = alignments.length
+      ? alignments
+          .map((a) => {
+            const top = (a.accolades || [])
+              .slice()
+              .sort((x, y) => (y.level || 0) - (x.level || 0))
+              .slice(0, 4)
+              .map(
+                (acc) => `
+                <li>
+                  <span>${esc(acc.title)}</span>
+                  <strong>${esc(t('sot.milestoneLevel', { n: acc.level }))}</strong>
+                </li>
+              `
+              )
+              .join('');
+            return `
+              <div class="pirate-alignment">
+                <div class="pirate-alignment-top">
+                  <strong>${esc(a.title || a.id)}</strong>
+                  <span>${esc(t('sot.milestonesSum', { n: a.milestoneSum }))}</span>
+                </div>
+                ${top ? `<ul class="pirate-accolade-list">${top}</ul>` : ''}
+              </div>
+            `;
+          })
+          .join('')
+      : `<p class="empty-state">${esc(t('sot.noCaptaincy'))}</p>`;
+
+    const shipsHtml = (p.captaincy?.ships || []).length
+      ? (p.captaincy.ships || [])
+          .map((ship) => {
+            const shipMs = (ship.alignments || []).reduce(
+              (sum, a) => sum + (a.milestoneSum || 0),
+              0
+            );
+            return `
+              <div class="pirate-ship">
+                <strong>${esc(ship.name || t('sot.unnamedShip'))}</strong>
+                <span>${esc(ship.type || '—')} · ${esc(
+                  t('sot.milestonesSum', { n: shipMs })
+                )}</span>
+              </div>
+            `;
+          })
+          .join('')
+      : `<p class="empty-state">${esc(t('sot.noShips'))}</p>`;
+
+    const guildsHtml = (p.guilds || []).length
+      ? (p.guilds || [])
+          .map(
+            (g) => `
+            <div class="pirate-guild">
+              <strong>${esc(g.name)}</strong>
+              <span>${
+                g.level != null ? `${esc(t('sot.level'))} ${esc(g.level)}` : ''
+              }${g.members != null ? ` · ${esc(g.members)} ${esc(t('sot.members'))}` : ''}</span>
+            </div>
+          `
+          )
+          .join('')
+      : `<p class="empty-state">${esc(t('sot.noGuilds'))}</p>`;
 
     const ach = p.achievements
       ? `${SOTPirate.formatNumber(p.achievements.completed, locale)} / ${SOTPirate.formatNumber(
@@ -217,6 +340,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       `
       : '';
 
+    const statsCount = (p.stats || []).length;
+
     pirateRoot.innerHTML = `
       <div class="pirate-card">
         <div class="pirate-hero">
@@ -231,7 +356,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p class="pirate-kicker">${esc(t('sot.liveBadge'))}</p>
             <h2>${esc(name)}</h2>
             <p class="pirate-title">${esc(title)}</p>
-            <p class="pirate-synced">${esc(t('sot.synced', { time: synced }))}</p>
+            <p class="pirate-synced">${esc(t('sot.synced', { time: synced }))}
+              · ${esc(t('sot.statsCount', { n: statsCount }))}</p>
           </div>
           <div class="pirate-actions">
             ${
@@ -266,23 +392,76 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         ${season}
 
-        <div class="pirate-section">
-          <h3>${esc(t('sot.companies'))}</h3>
+        <div class="pirate-tabs" role="tablist">
+          <button type="button" class="pirate-tab is-active" data-tab="companies">${esc(
+            t('sot.companies')
+          )}</button>
+          <button type="button" class="pirate-tab" data-tab="stats">${esc(
+            t('sot.allStats')
+          )}</button>
+          <button type="button" class="pirate-tab" data-tab="captaincy">${esc(
+            t('sot.captaincy')
+          )}</button>
+          <button type="button" class="pirate-tab" data-tab="ships">${esc(
+            t('sot.ships')
+          )}</button>
+          <button type="button" class="pirate-tab" data-tab="guilds">${esc(
+            t('sot.guilds')
+          )}</button>
+        </div>
+
+        <div class="pirate-tab-panel is-active" data-panel="companies">
           <div class="pirate-companies">
             ${companies || `<p class="empty-state">${esc(t('sot.noCompanies'))}</p>`}
           </div>
         </div>
 
-        ${
-          combat
-            ? `<div class="pirate-section">
-                <h3>${esc(t('sot.combatStats'))}</h3>
-                <div class="stat-row pirate-stat-row">${combat}</div>
-              </div>`
-            : ''
-        }
+        <div class="pirate-tab-panel" data-panel="stats">
+          ${
+            featuredHtml
+              ? `<div class="pirate-section">
+                  <h3>${esc(t('sot.highlights'))}</h3>
+                  <div class="stat-row pirate-stat-row">${featuredHtml}</div>
+                </div>`
+              : ''
+          }
+          <div class="pirate-section">
+            <h3>${esc(t('sot.allStats'))}</h3>
+            ${
+              allStatsHtml ||
+              `<p class="empty-state">${esc(t('sot.noStats'))}</p>`
+            }
+          </div>
+        </div>
+
+        <div class="pirate-tab-panel" data-panel="captaincy">
+          <div class="pirate-alignments">${milestonesHtml}</div>
+        </div>
+
+        <div class="pirate-tab-panel" data-panel="ships">
+          <div class="pirate-ships">${shipsHtml}</div>
+        </div>
+
+        <div class="pirate-tab-panel" data-panel="guilds">
+          <div class="pirate-guilds">${guildsHtml}</div>
+        </div>
       </div>
     `;
+
+    pirateRoot.querySelectorAll('.pirate-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-tab');
+        pirateRoot
+          .querySelectorAll('.pirate-tab')
+          .forEach((b) => b.classList.toggle('is-active', b === btn));
+        pirateRoot.querySelectorAll('.pirate-tab-panel').forEach((panel) => {
+          panel.classList.toggle(
+            'is-active',
+            panel.getAttribute('data-panel') === tab
+          );
+        });
+      });
+    });
 
     document.getElementById('sot-disconnect')?.addEventListener('click', () => {
       SOTPirate.clearSnapshot(session.id);

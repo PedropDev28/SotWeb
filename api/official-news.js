@@ -1,11 +1,29 @@
 /**
  * Proxy de novedades oficiales de Sea of Thieves.
- * La web oficial bloquea el RSS con WAF; usamos los anuncios de Rare en Steam
- * (mismo contenido que publica Rare) y enlazamos a seaofthieves.com cuando es posible.
+ * Steam solo publica en inglés; localizamos a ES y enlazamos a seaofthieves.com/es.
  */
 const STEAM_APP_ID = 1172620;
 const STEAM_NEWS_URL =
   `https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=${STEAM_APP_ID}&count=16&maxlength=360&format=json`;
+
+const MONTHS_ES = {
+  january: 'enero',
+  february: 'febrero',
+  march: 'marzo',
+  april: 'abril',
+  may: 'mayo',
+  june: 'junio',
+  july: 'julio',
+  august: 'agosto',
+  september: 'septiembre',
+  october: 'octubre',
+  november: 'noviembre',
+  december: 'diciembre',
+};
+
+function capitalize(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+}
 
 function cleanSummary(html) {
   let text = String(html || '')
@@ -25,47 +43,138 @@ function cleanSummary(html) {
   return text;
 }
 
-function badgeForTitle(title) {
+function badgeForTitle(title, lang) {
   const t = String(title || '');
-  if (/release notes|hotfix/i.test(t)) return 'Parche';
-  if (/this month/i.test(t)) return 'Calendario';
-  if (/community weekend/i.test(t)) return 'Evento';
-  if (/season\s+\d+/i.test(t)) return 'Temporada';
-  return 'Oficial';
+  const es = lang !== 'en';
+  if (/release notes|hotfix|notas del parche|revisión/i.test(t)) {
+    return es ? 'Parche' : 'Patch';
+  }
+  if (/this month|este mes/i.test(t)) return es ? 'Calendario' : 'Calendar';
+  if (/community weekend|fin de semana de la comunidad/i.test(t)) {
+    return es ? 'Evento' : 'Event';
+  }
+  if (/season\s+\d+|temporada\s+\d+/i.test(t)) {
+    return es ? 'Temporada' : 'Season';
+  }
+  return es ? 'Oficial' : 'Official';
 }
 
-function officialArticleUrl(title, gid) {
-  const month = String(title || '').match(
-    /This Month in Sea of Thieves:\s*([A-Za-z]+)\s+(\d{4})/i
+function localizeTitle(title, lang) {
+  if (lang === 'en') return title;
+  let t = String(title || '');
+
+  t = t.replace(
+    /This Month in Sea of Thieves:\s*([A-Za-z]+)\s+(\d{4})/i,
+    (_, month, year) => {
+      const m = MONTHS_ES[month.toLowerCase()] || month.toLowerCase();
+      return `Este mes en Sea of Thieves: ${capitalize(m)} de ${year}`;
+    }
   );
-  if (month) {
-    return `https://www.seaofthieves.com/news/this-month-${month[1].toLowerCase()}${month[2]}`;
-  }
+
+  t = t.replace(
+    /Sea of Thieves Release Notes\s*[–-]\s*Hotfix\s*(.+)/i,
+    'Notas del parche de Sea of Thieves – Revisión $1'
+  );
+  t = t.replace(
+    /Sea of Thieves Release Notes\s*[–-]\s*(.+)/i,
+    'Notas del parche de Sea of Thieves – $1'
+  );
+
+  t = t.replace(
+    /Personalise Your Pirate Playground in Sea of Thieves Season\s+(\d+)/i,
+    'Personaliza tu patio de juegos pirata en Sea of Thieves Temporada $1'
+  );
+  t = t.replace(
+    /All the Customary Fun in Season\s+(\d+)\s+Community Weekend on (.+)/i,
+    'Diversión a medida en el fin de semana de la comunidad de la Temporada $1 ($2)'
+  );
+  t = t.replace(/Community Weekend/gi, 'fin de semana de la comunidad');
+  t = t.replace(/\bSeason\s+(\d+)/gi, 'Temporada $1');
+  t = t.replace(/\bHotfix\b/gi, 'Revisión');
+
+  return t;
+}
+
+function monthArticleSlug(title) {
+  const month = String(title || '').match(
+    /(?:This Month in Sea of Thieves|Este mes en Sea of Thieves):\s*([A-Za-záéíóú]+)\s*(?:de\s*)?(\d{4})/i
+  );
+  if (!month) return null;
+
+  const raw = month[1].toLowerCase();
+  const en =
+    Object.keys(MONTHS_ES).find((k) => k === raw || MONTHS_ES[k] === raw) ||
+    raw;
+  return `this-month-${en}${month[2]}`;
+}
+
+function officialArticleUrl(title, gid, lang) {
+  const hub =
+    lang === 'en'
+      ? 'https://www.seaofthieves.com/news'
+      : 'https://www.seaofthieves.com/es/news';
+  const slug = monthArticleSlug(title);
+  if (slug) return `${hub}/${slug}`;
   return `https://steamcommunity.com/games/${STEAM_APP_ID}/announcements/detail/${gid}`;
 }
 
-function mapItem(item, index) {
+async function translateToSpanish(text) {
+  const q = String(text || '').trim();
+  if (!q) return q;
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+    q.slice(0, 450)
+  )}&langpair=en|es`;
+  const res = await fetch(url);
+  if (!res.ok) return q;
+  const data = await res.json();
+  const out = data?.responseData?.translatedText;
+  if (!out || /INVALID|MYMEMORY WARNING/i.test(out)) return q;
+  return out;
+}
+
+async function mapItem(item, index, lang) {
   const date = new Date(Number(item.date) * 1000);
   const iso = Number.isNaN(date.getTime())
     ? ''
     : date.toISOString().slice(0, 10);
 
+  const titleEn = item.title;
+  const summaryEn = cleanSummary(item.contents);
+  const title = localizeTitle(titleEn, lang);
+  let summary = summaryEn;
+
+  if (lang !== 'en' && summaryEn) {
+    try {
+      summary = await translateToSpanish(summaryEn);
+    } catch {
+      summary = summaryEn;
+    }
+  }
+
+  const isMonth = /this month|este mes/i.test(titleEn) || /este mes/i.test(title);
+  const es = lang !== 'en';
+
   return {
     id: `sot-${item.gid}`,
-    title: item.title,
+    title,
+    titleEn,
     date: iso,
-    summary: cleanSummary(item.contents),
-    badge: badgeForTitle(item.title),
+    summary,
+    badge: badgeForTitle(titleEn, lang),
     featured: index === 0,
     source: 'official',
-    link: officialArticleUrl(item.title, item.gid),
-    linkLabel: /This Month in Sea of Thieves/i.test(item.title)
-      ? 'Leer en seaofthieves.com'
-      : 'Leer anuncio oficial',
+    link: officialArticleUrl(titleEn, item.gid, lang),
+    linkLabel: isMonth
+      ? es
+        ? 'Leer en seaofthieves.com'
+        : 'Read on seaofthieves.com'
+      : es
+        ? 'Leer anuncio oficial'
+        : 'Read official announcement',
   };
 }
 
-async function fetchOfficialNews() {
+async function fetchOfficialNews(lang) {
   const res = await fetch(STEAM_NEWS_URL, {
     headers: { Accept: 'application/json' },
   });
@@ -75,10 +184,15 @@ async function fetchOfficialNews() {
     ? data.appnews.newsitems
     : [];
 
-  return items
+  const filtered = items
     .filter((item) => item.feedname === 'steam_community_announcements')
-    .slice(0, 6)
-    .map(mapItem);
+    .slice(0, 6);
+
+  const mapped = [];
+  for (let i = 0; i < filtered.length; i += 1) {
+    mapped.push(await mapItem(filtered[i], i, lang));
+  }
+  return mapped;
 }
 
 module.exports = async function handler(req, res) {
@@ -90,11 +204,18 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  const langRaw = String(req.query?.lang || 'es').toLowerCase();
+  const lang = langRaw === 'en' ? 'en' : 'es';
+
   try {
-    const news = await fetchOfficialNews();
+    const news = await fetchOfficialNews(lang);
     res.status(200).json({
       source: 'steam-rare',
-      officialHub: 'https://www.seaofthieves.com/news',
+      lang,
+      officialHub:
+        lang === 'en'
+          ? 'https://www.seaofthieves.com/news'
+          : 'https://www.seaofthieves.com/es/news',
       news,
     });
   } catch (err) {

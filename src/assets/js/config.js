@@ -15,7 +15,7 @@ window.SOT_CONFIG = {
   assetBase: './src/assets',
   /** Endpoint que sirve novedades oficiales (api/official-news.js en Vercel) */
   officialNewsApi: '/api/official-news',
-  officialNewsHub: 'https://www.seaofthieves.com/news',
+  officialNewsHub: 'https://www.seaofthieves.com/es/news',
   /** Proxy de estadísticas del perfil oficial (api/sot-profile.js en Vercel) */
   sotProfileApi: '/api/sot-profile',
 };
