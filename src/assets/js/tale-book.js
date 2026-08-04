@@ -46,12 +46,20 @@
 
       bookHost.innerHTML = `
         <div class="tale-book" aria-label="Libro del Gran Relato">
+          <span class="tale-metal tale-metal-tl" aria-hidden="true"></span>
+          <span class="tale-metal tale-metal-tr" aria-hidden="true"></span>
+          <span class="tale-metal tale-metal-bl" aria-hidden="true"></span>
+          <span class="tale-metal tale-metal-br" aria-hidden="true"></span>
           <div class="tale-spread" id="tale-spread">
             <div class="tale-base">
               <div class="tale-page tale-page-left" data-base="left">
+                <span class="tale-corner tale-corner-tl" aria-hidden="true"></span>
+                <span class="tale-corner tale-corner-bl" aria-hidden="true"></span>
                 ${renderSide(page.left, { pageNum: leftNum })}
               </div>
               <div class="tale-page tale-page-right" data-base="right">
+                <span class="tale-corner tale-corner-tr" aria-hidden="true"></span>
+                <span class="tale-corner tale-corner-br" aria-hidden="true"></span>
                 ${renderSide(page.right, {
                   pageNum: rightNum,
                   checklistId: 'checklist',
@@ -70,7 +78,7 @@
             </div>
 
             <div class="tale-drag-hint" data-drag-hint>
-              Arrastra una página para pasar hoja
+              Arrastra la hoja como en el juego
             </div>
           </div>
         </div>

@@ -121,10 +121,11 @@
   }
 
   const ORNAMENT = `
-    <svg class="tale-ornament" viewBox="0 0 200 24" aria-hidden="true">
-      <path d="M10 12 H70 M130 12 H190" stroke="#5a3a14" stroke-width="1" opacity=".55"/>
-      <path d="M100 4 L106 12 L100 20 L94 12 Z" fill="#5a3a14" opacity=".55"/>
-      <circle cx="100" cy="12" r="2.5" fill="#efe0c0"/>
+    <svg class="tale-ornament" viewBox="0 0 220 28" aria-hidden="true">
+      <path d="M12 14 H78 M142 14 H208" stroke="#5a3a14" stroke-width="1.1" opacity=".6"/>
+      <path d="M110 5 L118 14 L110 23 L102 14 Z" fill="#5a3a14" opacity=".55"/>
+      <circle cx="110" cy="14" r="3.2" fill="#ead7b0" stroke="#5a3a14" stroke-width="1"/>
+      <path d="M88 14 C96 8, 104 8, 110 14 C116 20, 124 20, 132 14" fill="none" stroke="#5a3a14" stroke-width="1" opacity=".45"/>
     </svg>`;
 
   /**

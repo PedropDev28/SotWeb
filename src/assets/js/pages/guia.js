@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     root.innerHTML = `
       <div class="guide-layout tale-stage">
-        <div>
+        <div class="tale-reading">
           <div class="tale-toolbar">
             <a class="back-link" href="guias.html">← Volver a guías</a>
             <span class="tale-page-indicator" data-page-indicator></span>
@@ -77,11 +77,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             <button type="button" class="btn btn-ghost" id="prev-page">← Anterior</button>
             <button type="button" class="btn" id="next-page">Siguiente →</button>
           </div>
-          <p class="tale-nav-hint">Arrastra la página derecha hacia la izquierda (o la izquierda hacia la derecha). También puedes usar los botones o Q / E.</p>
+          <p class="tale-nav-hint">Arrastra la página · Q / E · flechas</p>
         </div>
 
-        <aside class="panel progress-panel">
-          <h3>Tu progreso</h3>
+        <aside class="panel progress-panel tale-log">
+          <h3>Diario de a bordo</h3>
           <p style="margin-bottom: 1rem; color: rgba(243,230,200,0.75);" id="progress-label">
             ${
               session
@@ -101,6 +101,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         </aside>
       </div>
     `;
+
+    document.body.classList.add('tale-view');
 
     if (session) {
       root.addEventListener('change', (e) => {
