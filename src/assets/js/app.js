@@ -67,7 +67,7 @@
     if (!clientId) {
       if (hint) {
         hint.textContent =
-          'Para activar Google, pon tu Client ID en assets/js/config.js';
+          'Para activar Google, pon tu Client ID en src/assets/js/config.js';
         hint.classList.add('error');
       }
       mount.innerHTML = `

@@ -7,8 +7,15 @@
  * 4. Pega el Client ID abajo
  */
 window.SOT_CONFIG = {
-  googleClientId: '204522422343-e6c2ishmm6tehsq2ni2btl3bnnr58joo.apps.googleusercontent.com', // ej: '123456789-abcdef.apps.googleusercontent.com'
+  googleClientId: '204522422343-e6c2ishmm6tehsq2ni2btl3bnnr58joo.apps.googleusercontent.com',
   siteName: 'Los Indomables',
   /** Pega aquí el enlace de invitación permanente de tu Discord */
   discordInviteUrl: 'https://discord.gg/Cb6hzXd2Wx',
+  /** Ruta base de assets desde la raíz del sitio (HTML en la raíz para Vercel) */
+  assetBase: './src/assets',
+};
+
+window.SOT_ASSET = function sotAsset(path) {
+  const base = (window.SOT_CONFIG?.assetBase || './src/assets').replace(/\/$/, '');
+  return `${base}/${String(path).replace(/^\//, '')}`;
 };

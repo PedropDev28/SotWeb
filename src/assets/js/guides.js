@@ -66,7 +66,7 @@
 
   async function loadGuides() {
     if (cache) return cache;
-    const res = await fetch('assets/data/guides.json', { cache: 'no-store' });
+    const res = await fetch(window.SOT_ASSET('data/guides.json'), { cache: 'no-store' });
     if (!res.ok) throw new Error('No se pudieron cargar las guías.');
     const data = await res.json();
     cache = Array.isArray(data.guides) ? data.guides : [];

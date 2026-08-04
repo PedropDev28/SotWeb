@@ -3,7 +3,7 @@
 
   async function loadNews() {
     if (cache) return cache;
-    const res = await fetch('assets/data/news.json', { cache: 'no-store' });
+    const res = await fetch(window.SOT_ASSET('data/news.json'), { cache: 'no-store' });
     if (!res.ok) throw new Error('No se pudieron cargar las novedades.');
     const data = await res.json();
     cache = Array.isArray(data.news) ? data.news : [];

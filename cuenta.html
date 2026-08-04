@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi cuenta — Los Indomables</title>
+  <link rel="stylesheet" href="./src/assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="./src/assets/img/logo.png" alt="Los Indomables">
+        <span class="brand-text">
+          <strong>Los Indomables</strong>
+          <span>Burning Blade</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="guias.html">Guías</a></li>
+        <li><a href="index.html#novedades">Novedades</a></li>
+        <li><a href="#" data-discord-link>Discord</a></li>
+        <li><a href="cuenta.html" data-account-link>Mi cuenta</a></li>
+        <li><a href="auth.html" data-auth-link>Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-hero">
+      <h1>Mi cuenta</h1>
+      <p>Aquí ves lo que llevas marcado en las guías.</p>
+    </div>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="account-grid">
+        <aside class="panel" id="profile-panel">
+          <div class="empty-state">Cargando…</div>
+        </aside>
+        <div>
+          <div class="stat-row" id="stats-row"></div>
+          <div class="panel">
+            <h2 style="font-family: var(--font-display); color: var(--brass); margin-bottom: 1rem; font-size: 1.4rem;">
+              Progreso por guía
+            </h2>
+            <div class="guide-grid" id="account-guides">
+              <div class="empty-state">Cargando…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2026 Los Indomables — Fan site no oficial de Sea of Thieves.</p>
+      <ul class="footer-links">
+        <li><a href="guias.html">Guías</a></li>
+        <li><a href="#" data-discord-link>Discord</a></li>
+        <li><a href="index.html">Inicio</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="./src/assets/js/config.js"></script>
+  <script src="./src/assets/js/auth.js"></script>
+  <script src="./src/assets/js/progress.js"></script>
+  <script src="./src/assets/js/guides.js"></script>
+  <script src="./src/assets/js/app.js"></script>
+  <script src="./src/assets/js/pages/cuenta.js"></script>
+</body>
+</html>

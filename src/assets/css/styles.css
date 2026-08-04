@@ -333,8 +333,10 @@ main {
   position: relative;
   min-height: calc(100vh - var(--nav-h));
   display: grid;
-  align-items: end;
+  align-items: center;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 .hero-media {
@@ -367,12 +369,12 @@ main {
 
 .hero-logo {
   display: block;
-  width: min(460px, 90vw);
-  max-height: min(46vh, 420px);
+  width: min(380px, 82vw);
+  max-height: min(28vh, 260px);
   height: auto;
   object-fit: contain;
   object-position: top center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 18px rgba(255, 90, 0, 0.35));
   animation: heroIn 0.9s var(--ease) both;
 }
@@ -402,8 +404,12 @@ main {
   z-index: 3;
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 4rem 0 5rem;
+  padding: 1.25rem 0 2rem;
   max-width: 720px;
+}
+
+main > .hero:first-child {
+  margin-top: 0;
 }
 
 .hero h1 {
