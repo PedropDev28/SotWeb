@@ -1,0 +1,45 @@
+{
+  "_comentario": "Añade novedades aquí. Campos: id, title, date (YYYY-MM-DD), summary, badge (opcional), link (opcional), featured (true/false).",
+  "news": [
+    {
+      "id": "n1",
+      "title": "La tripulación iza el Burning Blade",
+      "date": "2026-08-04",
+      "badge": "Nuevo",
+      "featured": true,
+      "summary": "Nace Los Indomables: guías con formato de Grandes Relatos, cuenta para marcar progreso y cuartel en Discord. Sube a bordo y deja huella en el diario.",
+      "link": "guias.html",
+      "linkLabel": "Abrir guías"
+    },
+    {
+      "id": "n2",
+      "title": "Guías interactivas al estilo Tale Book",
+      "date": "2026-08-04",
+      "badge": "Destacado",
+      "featured": false,
+      "summary": "Pasa páginas arrastrando, marca checklist y guarda tu avance al iniciar sesión.",
+      "link": "guia.html?id=tall-tale-shroudbreaker",
+      "linkLabel": "Probar el libro"
+    },
+    {
+      "id": "n3",
+      "title": "Reclutamiento abierto en Discord",
+      "date": "2026-08-03",
+      "badge": "Tripulación",
+      "featured": false,
+      "summary": "Avisos de sails, alianzas, eventos de flota y spoilers de guías. Entra al servidor y presenta tu gamertag.",
+      "link": "discord",
+      "linkLabel": "Unirse al Discord"
+    },
+    {
+      "id": "n4",
+      "title": "Próximo: más Tall Tales y World Events",
+      "date": "2026-08-01",
+      "badge": "En camino",
+      "featured": false,
+      "summary": "Estamos preparando más relatos, checklists de compañías y rutas de farmeo. ¡Ideas bienvenidas en Discord!",
+      "link": "",
+      "linkLabel": ""
+    }
+  ]
+}

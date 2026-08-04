@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Indomables — Sea of Thieves</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/img/logo.png" alt="Los Indomables">
+        <span class="brand-text">
+          <strong>Los Indomables</strong>
+          <span>Sitio no oficial de Sea of Thieves</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="guias.html">Guías</a></li>
+        <li><a href="index.html#novedades">Novedades</a></li>
+        <li><a href="#" data-discord-link>Discord</a></li>
+        <li><a href="cuenta.html" data-account-link class="hidden">Mi cuenta</a></li>
+        <li><a href="auth.html" data-auth-link>Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-media" aria-hidden="true"></div>
+      <div class="hero-embers" aria-hidden="true" id="hero-embers"></div>
+      <div class="hero-content">
+        <img class="hero-logo" src="assets/img/logo.png" alt="Los Indomables">
+        <h1>Donde el horizonte arde</h1>
+        <p class="hero-lead">
+          Guías, progreso de botín y una tripulación lista para alzar velas.
+          Sube a bordo antes de que el mar se tiña de fuego.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="guias.html">Abrir guías</a>
+          <a class="btn btn-discord" href="#" data-discord-link>Unirse al Discord</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="alert-strip">
+      <div class="alert-strip-inner">
+        <div>
+          <strong>¡Reclutamiento a fuego!</strong>
+          <p>Buscamos piratas para sails, alianzas y raids. Presenta tu gamertag en Discord.</p>
+        </div>
+        <a class="btn btn-discord" href="#" data-discord-link>Entrar al servidor</a>
+      </div>
+    </div>
+
+    <section class="section" id="novedades">
+      <div class="section-head">
+        <h2>Últimas novedades</h2>
+        <p>Avisos de la tripulación, guías nuevas y lo que hierve en cubierta.</p>
+      </div>
+      <div class="news-grid" id="home-news">
+        <div class="empty-state">Cargando novedades…</div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="discord-banner">
+        <div>
+          <h2>Cuartel en Discord</h2>
+          <p>
+            Canales de aviso, LFG, spoilers de Tall Tales y memes de cuando os hunde
+            un skelly sloop. El enlace de invitación está siempre en el menú.
+          </p>
+        </div>
+        <a class="btn btn-discord" href="#" data-discord-link>Unirme ahora</a>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="section-head">
+        <h2>Por qué subir a bordo</h2>
+        <p>Cosas que importan cuando el cañón ya está caliente.</p>
+      </div>
+      <div class="hook-grid">
+        <article class="hook-item">
+          <strong>Libros de relato</strong>
+          <p>Guías con el formato de los Grandes Relatos: pasa páginas y marca el diario.</p>
+        </article>
+        <article class="hook-item">
+          <strong>Progreso guardado</strong>
+          <p>Crea cuenta y lleva la cuenta de Tall Tales, eventos y compañías.</p>
+        </article>
+        <article class="hook-item">
+          <strong>Tripulación viva</strong>
+          <p>Discord para juntar crew, avisar de flotas y compartir botín de tips.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="section-head">
+        <h2>Últimas rutas</h2>
+        <p>Guías listas para seguir. Entra con tu cuenta para guardar el progreso.</p>
+      </div>
+      <div class="guide-grid" id="home-guides">
+        <div class="empty-state">Cargando guías…</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2026 Los Indomables — Fan site no oficial de Sea of Thieves.</p>
+      <ul class="footer-links">
+        <li><a href="guias.html">Guías</a></li>
+        <li><a href="index.html#novedades">Novedades</a></li>
+        <li><a href="#" data-discord-link>Discord</a></li>
+        <li><a href="auth.html">Cuenta</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/progress.js"></script>
+  <script src="assets/js/guides.js"></script>
+  <script src="assets/js/news.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const embers = document.getElementById('hero-embers');
+      if (embers) {
+        embers.innerHTML = Array.from({ length: 18 }, (_, i) => {
+          const left = Math.round(Math.random() * 100);
+          const delay = (Math.random() * 6).toFixed(1);
+          const duration = (5 + Math.random() * 7).toFixed(1);
+          const size = 2 + Math.round(Math.random() * 4);
+          return `<span style="left:${left}%;width:${size}px;height:${size}px;animation-delay:${delay}s;animation-duration:${duration}s"></span>`;
+        }).join('');
+      }
+
+      const newsMount = document.getElementById('home-news');
+      try {
+        const news = await SOTNews.loadNews();
+        newsMount.innerHTML = news.map((item) => SOTNews.renderNewsItem(item)).join('');
+      } catch {
+        newsMount.innerHTML = '<div class="empty-state">No se pudieron cargar las novedades.</div>';
+      }
+
+      const mount = document.getElementById('home-guides');
+      try {
+        const guides = (await SOTGuides.loadGuides())
+          .filter((g) => g.category !== 'Plantillas')
+          .slice(0, 3);
+        const session = SOTAuth.getSession();
+        mount.innerHTML = guides
+          .map((g) => {
+            const stats = session
+              ? SOTProgress.getGuideStats(session.id, g)
+              : { percent: 0 };
+            return SOTGuides.renderGuideCard(g, stats);
+          })
+          .join('');
+      } catch {
+        mount.innerHTML = '<div class="empty-state">No se pudieron cargar las guías.</div>';
+      }
+    });
+  </script>
+</body>
+</html>
