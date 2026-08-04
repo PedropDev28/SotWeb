@@ -217,6 +217,48 @@ select {
   color: var(--brass);
 }
 
+.lang-switch-item {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid rgba(232, 162, 58, 0.35);
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(20, 8, 5, 0.55);
+}
+
+.lang-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(243, 230, 200, 0.65);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.lang-btn + .lang-btn {
+  border-left: 1px solid rgba(232, 162, 58, 0.28);
+}
+
+.lang-btn:hover {
+  color: var(--brass);
+}
+
+.lang-btn.is-active {
+  color: #1a0c06;
+  background: linear-gradient(180deg, #e8a23a, #c47a1e);
+}
+
 .nav-links a:hover::after,
 .nav-links a.active::after {
   transform: scaleX(1);
@@ -474,6 +516,20 @@ main > .hero:first-child {
   color: rgba(243, 230, 200, 0.8);
 }
 
+.section-more {
+  display: inline-block;
+  margin-top: 0.85rem;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ember);
+}
+
+.section-more:hover {
+  color: #ffb060;
+}
+
 .guide-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -649,7 +705,7 @@ main > .hero:first-child {
   align-items: start;
 }
 
-/* —— Libro de Grandes Relatos (estilo Tale Book) —— */
+/* â€”â€” Libro de Grandes Relatos (estilo Tale Book) â€”â€” */
 body.tale-view {
   background:
     radial-gradient(ellipse 80% 60% at 50% 40%, rgba(60, 28, 12, 0.45), transparent 55%),
@@ -698,6 +754,7 @@ body.tale-view .site-footer {
   text-transform: uppercase;
 }
 
+
 .tale-page-indicator {
   font-family: var(--font-display);
   font-size: 0.72rem;
@@ -711,6 +768,7 @@ body.tale-view .site-footer {
   z-index: 1;
   padding: 1.35rem 1.45rem 1.45rem 1.15rem;
   border-radius: 6px 14px 14px 6px;
+  overflow: visible;
   background:
     linear-gradient(115deg, rgba(255, 180, 80, 0.08), transparent 30%),
     linear-gradient(90deg, #1a0c07 0%, #3b2214 7%, #5a3822 18%, #4a2c18 55%, #3a2012 100%);
@@ -768,14 +826,14 @@ body.tale-view .site-footer {
 .tale-metal-bl { bottom: 10px; left: 28px; border-radius: 0 8px 0 3px; }
 .tale-metal-br { bottom: 10px; right: 14px; border-radius: 8px 0 3px 0; }
 
-.tale-spread {
+.book {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  width: 100%;
   min-height: min(68vh, 620px);
   border-radius: 2px;
-  overflow: hidden;
-  perspective: 2600px;
+  overflow: visible;
+  perspective: 1600px;
   touch-action: none;
   cursor: grab;
   user-select: none;
@@ -786,34 +844,40 @@ body.tale-view .site-footer {
   animation: taleOpen 0.55s var(--ease);
 }
 
-.tale-spread:active,
-.tale-spread.is-flipping {
+.book:active,
+.book.is-flipping {
   cursor: grabbing;
 }
 
-.tale-spread.is-flipping .checklist,
-.tale-spread.is-flipping input {
+.book.is-flipping .checklist,
+.book.is-flipping input {
   pointer-events: none;
 }
 
-.tale-base,
-.tale-under {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.tale-base { z-index: 1; }
-.tale-under { z-index: 2; }
-
-.tale-base .tale-page,
-.tale-under .tale-page {
+.book-left,
+.book-right {
+  position: relative;
+  width: 50%;
   height: 100%;
-  min-height: 100%;
+  min-height: inherit;
 }
 
-.tale-spread::before {
+.book-left {
+  z-index: 1;
+  box-shadow: inset -18px 0 28px rgba(70, 40, 15, 0.12);
+}
+
+.book-left .tale-page {
+  height: 100%;
+  min-height: min(68vh, 620px);
+}
+
+.book-right {
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.book::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -829,70 +893,78 @@ body.tale-view .site-footer {
     rgba(40, 22, 10, 0.42) 58%,
     rgba(90, 55, 25, 0.18)
   );
-  z-index: 5;
+  z-index: 40;
   pointer-events: none;
 }
 
-.tale-spread::after {
+.book::after {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 6;
+  z-index: 41;
   background:
     radial-gradient(ellipse at 18% 12%, rgba(255, 245, 220, 0.12), transparent 28%),
     radial-gradient(ellipse at 82% 88%, rgba(90, 50, 20, 0.16), transparent 32%),
     linear-gradient(180deg, rgba(60, 30, 10, 0.08), transparent 18%, transparent 82%, rgba(60, 30, 10, 0.1));
 }
 
-.tale-flipper {
+.book-sheet {
   position: absolute;
   top: 0;
-  bottom: 0;
-  width: 50%;
-  z-index: 4;
-  transform-style: preserve-3d;
-  will-change: transform;
-  --flip-shade: 0;
-  filter: drop-shadow(-8px 0 16px rgba(0, 0, 0, calc(var(--flip-shade, 0) * 0.65)));
-}
-
-.tale-flipper.mode-next {
   right: 0;
-  left: auto;
+  width: 100%;
+  height: 100%;
+  min-height: min(68vh, 620px);
   transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transform: rotateY(0deg);
 }
 
-.tale-flipper.mode-prev {
-  left: 0;
-  right: auto;
-  transform-origin: right center;
+.book-sheet.is-dragging {
+  transition: none;
 }
 
-.tale-flip-face {
+.book-face {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  overflow: hidden;
-  background: #e6d2a8;
+  overflow: auto;
+  background: #ead7b0;
 }
 
-.tale-flip-face .tale-page {
-  min-height: 100%;
+.book-face .tale-page {
   height: 100%;
+  min-height: min(68vh, 620px);
 }
 
-.tale-flip-front { transform: rotateY(0deg); }
-.tale-flip-back { transform: rotateY(180deg); }
-.tale-flipper.mode-prev .tale-flip-back { transform: rotateY(-180deg); }
+.book-face-front {
+  transform: rotateY(0deg);
+  box-shadow: inset 18px 0 28px rgba(70, 40, 15, 0.08);
+}
+
+.book-face-back {
+  transform: rotateY(180deg);
+  box-shadow: inset -18px 0 28px rgba(70, 40, 15, 0.08);
+}
+
+.book-sheet.is-flipped {
+  transform: rotateY(-180deg);
+  pointer-events: none;
+}
+
+.book-sheet.is-flipped .book-face-back {
+  pointer-events: auto;
+}
 
 .tale-drag-hint {
   position: absolute;
   left: 50%;
   bottom: 18px;
   transform: translateX(-50%);
-  z-index: 7;
+  z-index: 50;
   padding: 0.4rem 0.9rem;
   border: 1px solid rgba(90, 55, 25, 0.28);
   background: rgba(236, 220, 185, 0.88);
@@ -906,10 +978,9 @@ body.tale-view .site-footer {
 }
 
 .tale-drag-hint.hidden-hint,
-.tale-spread.is-flipping .tale-drag-hint {
+.book.is-flipping .tale-drag-hint {
   opacity: 0;
 }
-
 .tale-page {
   position: relative;
   padding: clamp(1.5rem, 3.2vw, 2.35rem) clamp(1.4rem, 3.2vw, 2.5rem);
@@ -1329,11 +1400,281 @@ body.tale-view .site-footer {
   align-items: start;
 }
 
+.account-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.account-subheading {
+  font-family: var(--font-display);
+  color: var(--brass);
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.pirate-profile {
+  min-width: 0;
+}
+
+.pirate-connect-head h2,
+.pirate-card h2,
+.pirate-section h3 {
+  font-family: var(--font-display);
+  color: var(--brass);
+  margin-bottom: 0.35rem;
+}
+
+.pirate-connect-head p,
+.pirate-title {
+  opacity: 0.78;
+  margin-bottom: 0;
+}
+
+.pirate-warning {
+  margin: 1.25rem 0;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(255, 106, 26, 0.45);
+  background: rgba(139, 26, 18, 0.22);
+}
+
+.pirate-warning strong {
+  display: block;
+  font-family: var(--font-display);
+  color: var(--foam);
+  margin-bottom: 0.35rem;
+}
+
+.pirate-warning p {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.pirate-steps {
+  margin: 0 0 1.25rem 1.15rem;
+  display: grid;
+  gap: 0.45rem;
+  color: rgba(243, 230, 200, 0.82);
+  font-size: 0.95rem;
+}
+
+.pirate-steps a {
+  color: var(--brass);
+}
+
+.pirate-form textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--sand);
+  font: inherit;
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.pirate-form textarea:focus {
+  outline: 1px solid var(--brass);
+}
+
+.pirate-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.92rem;
+  opacity: 0.88;
+  cursor: pointer;
+}
+
+.pirate-check input {
+  margin-top: 0.25rem;
+}
+
+.pirate-card {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(145deg, rgba(255, 59, 0, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(232, 215, 181, 0.08), rgba(7, 16, 24, 0.45)),
+    rgba(11, 28, 44, 0.92);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  box-shadow: var(--shadow);
+}
+
+.pirate-hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.35rem;
+}
+
+.pirate-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 2px solid var(--brass);
+  overflow: hidden;
+  background: var(--ocean);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--brass);
+  flex-shrink: 0;
+}
+
+.pirate-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pirate-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--foam);
+  margin-bottom: 0.2rem;
+}
+
+.pirate-synced {
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  opacity: 0.65;
+}
+
+.pirate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.pirate-currencies {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.pirate-currency {
+  padding: 0.9rem 0.85rem;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.pirate-currency span {
+  display: block;
+  font-size: 0.82rem;
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+
+.pirate-currency strong {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--brass);
+  line-height: 1.15;
+}
+
+.pirate-currency.is-gold strong { color: #f0c45c; }
+.pirate-currency.is-doubloon strong { color: #7ec8ff; }
+.pirate-currency.is-ancient strong { color: #c9a0ff; }
+.pirate-currency.is-ach strong { color: var(--foam); }
+
+.pirate-season {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 1.35rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.pirate-season > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pirate-season strong {
+  font-family: var(--font-display);
+  color: var(--brass);
+}
+
+.pirate-meter {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(243, 230, 200, 0.12);
+  overflow: hidden;
+}
+
+.pirate-meter i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--brass-dark), var(--ember));
+}
+
+.pirate-section {
+  margin-top: 0.5rem;
+}
+
+.pirate-section h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.85rem;
+}
+
+.pirate-companies {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.pirate-company {
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.pirate-company-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+  font-size: 0.92rem;
+}
+
+.pirate-company-top strong {
+  font-family: var(--font-display);
+  color: var(--sand);
+}
+
+.pirate-company-top span,
+.pirate-company-meta {
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+.pirate-company-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+}
+
+.pirate-stat-row {
+  margin-bottom: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .stat-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .stat {
@@ -1470,7 +1811,7 @@ body.tale-view .site-footer {
   }
 }
 
-/* Novedades, Discord y llamadas de atención */
+/* Novedades, Discord y llamadas de atenciÃ³n */
 .alert-strip {
   position: relative;
   z-index: 2;
@@ -1580,6 +1921,14 @@ body.tale-view .site-footer {
   text-transform: uppercase;
 }
 
+.news-item.is-official {
+  border-color: rgba(255, 176, 112, 0.28);
+}
+
+.news-item.is-official .news-badge {
+  background: linear-gradient(90deg, #d4a574, #b87333);
+}
+
 .discord-banner {
   position: relative;
   overflow: hidden;
@@ -1682,7 +2031,32 @@ body.tale-view .site-footer {
     grid-template-columns: 1fr;
   }
 
-  .tale-spread {
+  .pirate-hero {
+    grid-template-columns: auto 1fr;
+  }
+
+  .pirate-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .pirate-currencies,
+  .pirate-companies,
+  .pirate-stat-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 560px) {
+    .pirate-currencies,
+    .pirate-companies {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .book,
+  .book-left .tale-page,
+  .book-face .tale-page,
+  .book-sheet {
     min-height: min(58vh, 480px);
   }
 
@@ -1750,6 +2124,12 @@ body.tale-view .site-footer {
   .nav-links a {
     padding: 0.85rem 0.5rem;
     border-bottom: 1px solid rgba(212, 168, 75, 0.12);
+  }
+
+  .lang-switch-item {
+    width: 100%;
+    padding: 0.65rem 0.5rem 0.25rem;
+    justify-content: flex-start;
   }
 }
 

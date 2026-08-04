@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const t = (key) => window.SOTI18n?.t?.(key) ?? key;
+
   const embers = document.getElementById('hero-embers');
   if (embers) {
     embers.innerHTML = Array.from({ length: 18 }, () => {
@@ -16,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const news = await SOTNews.loadNews();
       newsMount.innerHTML = news.map((item) => SOTNews.renderNewsItem(item)).join('');
     } catch {
-      newsMount.innerHTML = '<div class="empty-state">No se pudieron cargar las novedades.</div>';
+      newsMount.innerHTML = `<div class="empty-state">${t('home.newsError')}</div>`;
     }
   }
 
@@ -37,6 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       })
       .join('');
   } catch {
-    mount.innerHTML = '<div class="empty-state">No se pudieron cargar las guías.</div>';
+    mount.innerHTML = `<div class="empty-state">${t('home.guidesError')}</div>`;
   }
 });

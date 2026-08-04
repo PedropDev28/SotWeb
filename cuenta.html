@@ -3,52 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi cuenta — Los Indomables</title>
+  <title data-i18n="account.title">Mi cuenta — Los Indomables</title>
   <link rel="stylesheet" href="./src/assets/css/styles.css">
 </head>
 <body>
   <header class="site-header">
     <nav class="nav">
       <a class="brand" href="index.html">
-        <img class="brand-logo" src="./src/assets/img/logo.png" alt="Los Indomables">
+        <img class="brand-logo" src="./src/assets/img/logo.png" alt="Los Indomables" data-i18n-attr="alt:meta.brand">
         <span class="brand-text">
-          <strong>Los Indomables</strong>
-          <span>Burning Blade</span>
+          <strong data-i18n="meta.brand">Los Indomables</strong>
+          <span data-i18n="meta.taglineShort">Burning Blade</span>
         </span>
       </a>
-      <button class="nav-toggle" type="button" aria-label="Abrir menú">
+      <button class="nav-toggle" type="button" data-i18n-attr="aria-label:nav.openMenu" aria-label="Abrir menú">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links">
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="guias.html">Guías</a></li>
-        <li><a href="index.html#novedades">Novedades</a></li>
-        <li><a href="#" data-discord-link>Discord</a></li>
-        <li><a href="cuenta.html" data-account-link>Mi cuenta</a></li>
-        <li><a href="auth.html" data-auth-link>Entrar</a></li>
+        <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
+        <li><a href="guias.html" data-i18n="nav.guides">Guías</a></li>
+        <li><a href="index.html#novedades" data-i18n="nav.news">Novedades</a></li>
+        <li><a href="#" data-discord-link data-i18n="nav.discord">Discord</a></li>
+        <li><a href="cuenta.html" data-account-link data-i18n="nav.account">Mi cuenta</a></li>
+        <li><a href="auth.html" data-auth-link data-i18n="nav.login">Entrar</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
     <div class="page-hero">
-      <h1>Mi cuenta</h1>
-      <p>Aquí ves lo que llevas marcado en las guías.</p>
+      <h1 data-i18n="account.heading">Mi cuenta</h1>
+      <p data-i18n="account.lead">Perfil de la flota y estadísticas reales de Sea of Thieves.</p>
     </div>
 
     <section class="section" style="padding-top: 0;">
       <div class="account-grid">
         <aside class="panel" id="profile-panel">
-          <div class="empty-state">Cargando…</div>
+          <div class="empty-state" data-i18n="account.loading">Cargando…</div>
         </aside>
-        <div>
+        <div class="account-main">
+          <div id="pirate-profile" class="pirate-profile">
+            <div class="empty-state" data-i18n="account.loading">Cargando…</div>
+          </div>
+
           <div class="stat-row" id="stats-row"></div>
           <div class="panel">
-            <h2 style="font-family: var(--font-display); color: var(--brass); margin-bottom: 1rem; font-size: 1.4rem;">
+            <h2 class="account-subheading" data-i18n="account.progressByGuide">
               Progreso por guía
             </h2>
             <div class="guide-grid" id="account-guides">
-              <div class="empty-state">Cargando…</div>
+              <div class="empty-state" data-i18n="account.loading">Cargando…</div>
             </div>
           </div>
         </div>
@@ -58,19 +62,21 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <p>© 2026 Los Indomables — Fan site no oficial de Sea of Thieves.</p>
+      <p data-i18n="footer.copy">© 2026 Los Indomables — Fan site no oficial de Sea of Thieves.</p>
       <ul class="footer-links">
-        <li><a href="guias.html">Guías</a></li>
-        <li><a href="#" data-discord-link>Discord</a></li>
-        <li><a href="index.html">Inicio</a></li>
+        <li><a href="guias.html" data-i18n="nav.guides">Guías</a></li>
+        <li><a href="#" data-discord-link data-i18n="nav.discord">Discord</a></li>
+        <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
       </ul>
     </div>
   </footer>
 
   <script src="./src/assets/js/config.js"></script>
+  <script src="./src/assets/js/i18n.js"></script>
   <script src="./src/assets/js/auth.js"></script>
   <script src="./src/assets/js/progress.js"></script>
   <script src="./src/assets/js/guides.js"></script>
+  <script src="./src/assets/js/sot-stats.js"></script>
   <script src="./src/assets/js/app.js"></script>
   <script src="./src/assets/js/pages/cuenta.js"></script>
 </body>

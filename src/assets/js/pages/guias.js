@@ -1,20 +1,21 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const t = (key) => window.SOTI18n?.t?.(key) ?? key;
   const list = document.getElementById('guides-list');
   const filters = document.getElementById('guide-filters');
   if (!list || !filters) return;
 
   let guides = [];
-  let active = 'Todas';
+  let active = '__all__';
   const session = SOTAuth.getSession();
 
   function render() {
     const visible = guides.filter((g) => {
-      if (active === 'Todas') return g.category !== 'Plantillas';
+      if (active === '__all__') return g.category !== 'Plantillas';
       return g.category === active;
     });
 
     if (!visible.length) {
-      list.innerHTML = '<div class="empty-state">No hay guías en esta categoría.</div>';
+      list.innerHTML = `<div class="empty-state">${t('guides.empty')}</div>`;
       return;
     }
 
@@ -30,14 +31,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     guides = await SOTGuides.loadGuides();
-    const cats = ['Todas', ...SOTGuides.categories(guides)];
+    const cats = [
+      { id: '__all__', label: t('guides.filterAll') },
+      ...SOTGuides.categories(guides)
+        .filter((c) => c !== 'Plantillas')
+        .map((c) => ({
+          id: c,
+          label: window.SOTI18n?.categoryLabel?.(c) || c,
+        })),
+    ];
     filters.innerHTML = cats
       .map(
         (cat) =>
           `<button type="button" class="filter-btn${
-            cat === active ? ' active' : ''
-          }" data-cat="${SOTGuides.escapeHtml(cat)}">${SOTGuides.escapeHtml(
-            cat
+            cat.id === active ? ' active' : ''
+          }" data-cat="${SOTGuides.escapeHtml(cat.id)}">${SOTGuides.escapeHtml(
+            cat.label
           )}</button>`
       )
       .join('');
@@ -53,6 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     render();
   } catch {
-    list.innerHTML = '<div class="empty-state">No se pudieron cargar las guías.</div>';
+    list.innerHTML = `<div class="empty-state">${t('guides.error')}</div>`;
   }
 });

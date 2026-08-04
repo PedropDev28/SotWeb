@@ -1,5 +1,5 @@
 {
-  "_comentario": "Añade guías con id, title, category, difficulty, summary, steps[], checklist[]. Opcional: coverSketch y step.sketch (compass|island|chest|ship|skull|map|key). Si quieres controlar cada doble página a mano, usa pages[] en lugar de steps.",
+  "_comentario": "Añade guías con id, title, category, difficulty, summary, steps[], checklist[]. Opcional: coverSketch, step.sketch y translations.en para inglés.",
   "guides": [
     {
       "id": "tall-tale-shroudbreaker",
@@ -45,7 +45,51 @@
         { "id": "tt1-island", "label": "Encontrar la isla de la pista" },
         { "id": "tt1-artifact", "label": "Recuperar el artefacto" },
         { "id": "tt1-finish", "label": "Entregar y completar la Tall Tale" }
-      ]
+      ],
+      "translations": {
+        "en": {
+          "title": "The Shroudbreaker",
+          "summary": "First page of the voyage toward the Shores of Gold. Follow the journal and recover the artifact.",
+          "steps": [
+            {
+              "id": "step-1",
+              "title": "The stranger in the tavern",
+              "sketch": "skull",
+              "content": "In any <strong>Outpost</strong> tavern waits the Mysterious Stranger. Speak with him, vote the tale and pick up the book from the table.\n\nKeep the journal aboard: every drawing is a clue.",
+              "tips": [
+                "The book appears in the map radial menu.",
+                "Read every page before setting sail."
+              ]
+            },
+            {
+              "id": "step-2",
+              "title": "Clues on the water",
+              "sketch": "map",
+              "content": "Compare the journal illustrations with the island shapes on the map table. When the drawing matches, dock and search the marked place.\n\nDig where the clue points.",
+              "tips": [
+                "Rotate the book: sometimes the drawing is oriented differently from the map.",
+                "Ruins and carved stones are often the key spot."
+              ]
+            },
+            {
+              "id": "step-3",
+              "title": "The artifact and the return",
+              "sketch": "key",
+              "content": "Solve the final riddle of the artifact. With the trophy in hand, return to the Mysterious Stranger and close the tale.",
+              "tips": [
+                "If you get stuck, check whether the book gained new pages."
+              ]
+            }
+          ],
+          "checklist": [
+            { "id": "tt1-start", "label": "Start the Tall Tale at an Outpost" },
+            { "id": "tt1-book", "label": "Pick up and read the full journal" },
+            { "id": "tt1-island", "label": "Find the clue island" },
+            { "id": "tt1-artifact", "label": "Recover the artifact" },
+            { "id": "tt1-finish", "label": "Hand in and complete the Tall Tale" }
+          ]
+        }
+      }
     },
     {
       "id": "world-events-skeleton-fleet",
@@ -89,7 +133,49 @@
         { "id": "sf-waves", "label": "Superar todas las oleadas" },
         { "id": "sf-loot", "label": "Recoger el botín principal" },
         { "id": "sf-sell", "label": "Vender el botín a salvo" }
-      ]
+      ],
+      "translations": {
+        "en": {
+          "title": "The Skeleton Fleet",
+          "summary": "A ship-shaped cloud marks the battle. Sinking the fleet fills the holds with loot.",
+          "steps": [
+            {
+              "id": "step-1",
+              "title": "The cloud on the horizon",
+              "sketch": "ship",
+              "content": "Scan the sky for the cloud with a ship silhouette. Set course with the crew ready and cannons loaded.",
+              "tips": [
+                "Bring spare planks, balls and food.",
+                "A brigantine or galleon makes the fight easier."
+              ]
+            },
+            {
+              "id": "step-2",
+              "title": "Waves of bones",
+              "sketch": "skull",
+              "content": "Defeat each wave of skeleton ships. Between fights, put out fires and patch the hull before the next charge.",
+              "tips": [
+                "Assign roles: cannons, repairs and helm."
+              ]
+            },
+            {
+              "id": "step-3",
+              "title": "Loot to safe harbour",
+              "sketch": "chest",
+              "content": "After the final ship, collect whatever floats and sell it at the right vendor for each loot type.",
+              "tips": [
+                "Do not pile too much if other crews are nearby."
+              ]
+            }
+          ],
+          "checklist": [
+            { "id": "sf-find", "label": "Find the Fleet cloud" },
+            { "id": "sf-waves", "label": "Clear every wave" },
+            { "id": "sf-loot", "label": "Collect the main loot" },
+            { "id": "sf-sell", "label": "Sell the loot safely" }
+          ]
+        }
+      }
     },
     {
       "id": "comm-gold-hoarders-50",
@@ -123,7 +209,39 @@
         { "id": "gh-level25", "label": "Llegar a reputación 25" },
         { "id": "gh-level50", "label": "Llegar a reputación 50" },
         { "id": "gh-promo", "label": "Comprar los ascensos disponibles" }
-      ]
+      ],
+      "translations": {
+        "en": {
+          "title": "Gold Hoarders to 50",
+          "summary": "Treasure maps, vaults and chests: the short path to golden reputation.",
+          "steps": [
+            {
+              "id": "step-1",
+              "title": "X marks the maps",
+              "sketch": "map",
+              "content": "At any Outpost, speak with the Gold Hoarders representative and buy map voyages. Start on small islands to find your rhythm.",
+              "tips": [
+                "Fortress or vault maps give more reputation."
+              ]
+            },
+            {
+              "id": "step-2",
+              "title": "Dig and sell",
+              "sketch": "chest",
+              "content": "Dig up the chests, carry them to the ship and sell them to the same representative. Avoid long crossings with a full hold in plain sight.",
+              "tips": [
+                "Sell often if the server is hot."
+              ]
+            }
+          ],
+          "checklist": [
+            { "id": "gh-level10", "label": "Reach reputation 10" },
+            { "id": "gh-level25", "label": "Reach reputation 25" },
+            { "id": "gh-level50", "label": "Reach reputation 50" },
+            { "id": "gh-promo", "label": "Buy available promotions" }
+          ]
+        }
+      }
     },
     {
       "id": "guia-plantilla",
@@ -155,7 +273,37 @@
         { "id": "item-1", "label": "Marca del diario 1" },
         { "id": "item-2", "label": "Marca del diario 2" },
         { "id": "item-3", "label": "Marca del diario 3" }
-      ]
+      ],
+      "translations": {
+        "en": {
+          "title": "New tale template",
+          "summary": "Copy this block in guides.json, change the id and fill title, steps and checklist.",
+          "steps": [
+            {
+              "id": "step-1",
+              "title": "Clue 1 title",
+              "sketch": "island",
+              "content": "Left page text. You can use <strong>bold</strong> and line breaks.\n\nIt will show as a journal leaf.",
+              "tips": [
+                "Margin note 1 (right page)",
+                "Margin note 2"
+              ]
+            },
+            {
+              "id": "step-2",
+              "title": "Clue 2 title",
+              "sketch": "key",
+              "content": "Another step of the tale.",
+              "tips": []
+            }
+          ],
+          "checklist": [
+            { "id": "item-1", "label": "Journal mark 1" },
+            { "id": "item-2", "label": "Journal mark 2" },
+            { "id": "item-3", "label": "Journal mark 3" }
+          ]
+        }
+      }
     }
   ]
 }

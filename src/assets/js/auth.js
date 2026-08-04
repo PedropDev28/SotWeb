@@ -50,15 +50,19 @@
       .join('');
   }
 
+  function t(key) {
+    return window.SOTI18n?.t?.(key) ?? key;
+  }
+
   async function register({ name, email, password }) {
     if (!name?.trim() || !email?.trim() || !password) {
-      throw new Error('Rellena todos los campos.');
+      throw new Error(t('auth.fillAll'));
     }
     if (password.length < 6) {
-      throw new Error('La contraseña debe tener al menos 6 caracteres.');
+      throw new Error(t('auth.passwordShort'));
     }
     if (findByEmail(email)) {
-      throw new Error('Ya existe una cuenta con ese correo.');
+      throw new Error(t('auth.emailExists'));
     }
 
     const user = {
@@ -80,18 +84,18 @@
   async function login({ email, password }) {
     const user = findByEmail(email || '');
     if (!user || user.provider !== 'local') {
-      throw new Error('Correo o contraseña incorrectos.');
+      throw new Error(t('auth.badCredentials'));
     }
     const hash = await hashPassword(password || '');
     if (hash !== user.passwordHash) {
-      throw new Error('Correo o contraseña incorrectos.');
+      throw new Error(t('auth.badCredentials'));
     }
     return setSession(user);
   }
 
   function loginWithGoogleProfile(profile) {
     if (!profile?.email) {
-      throw new Error('No se pudo leer el perfil de Google.');
+      throw new Error(t('auth.googleProfile'));
     }
 
     let user = findByEmail(profile.email);

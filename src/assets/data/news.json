@@ -1,15 +1,24 @@
 {
-  "_comentario": "Añade novedades aquí. Campos: id, title, date (YYYY-MM-DD), summary, badge (opcional), link (opcional), featured (true/false).",
+  "_comentario": "Novedades de la tripulación. Las oficiales se cargan solas desde Rare/Steam (api/official-news). Campos: id, title, date, summary, badge, link, linkLabel, translations.en opcional.",
   "news": [
     {
       "id": "n1",
       "title": "La tripulación iza el Burning Blade",
       "date": "2026-08-04",
-      "badge": "Nuevo",
-      "featured": true,
+      "badge": "Tripulación",
+      "featured": false,
+      "source": "crew",
       "summary": "Nace Los Indomables: guías con formato de Grandes Relatos, cuenta para marcar progreso y cuartel en Discord. Sube a bordo y deja huella en el diario.",
       "link": "guias.html",
-      "linkLabel": "Abrir guías"
+      "linkLabel": "Abrir guías",
+      "translations": {
+        "en": {
+          "title": "The crew raises the Burning Blade",
+          "badge": "Crew",
+          "summary": "Los Indomables is born: Tall Tale–style guides, an account to track progress and Discord quarters. Climb aboard and leave your mark in the journal.",
+          "linkLabel": "Open guides"
+        }
+      }
     },
     {
       "id": "n2",
@@ -17,9 +26,18 @@
       "date": "2026-08-04",
       "badge": "Destacado",
       "featured": false,
+      "source": "crew",
       "summary": "Pasa páginas arrastrando, marca checklist y guarda tu avance al iniciar sesión.",
       "link": "guia.html?id=tall-tale-shroudbreaker",
-      "linkLabel": "Probar el libro"
+      "linkLabel": "Probar el libro",
+      "translations": {
+        "en": {
+          "title": "Interactive guides in Tale Book style",
+          "badge": "Featured",
+          "summary": "Turn pages by dragging, tick the checklist and save your progress when you sign in.",
+          "linkLabel": "Try the book"
+        }
+      }
     },
     {
       "id": "n3",
@@ -27,19 +45,18 @@
       "date": "2026-08-03",
       "badge": "Tripulación",
       "featured": false,
+      "source": "crew",
       "summary": "Avisos de sails, alianzas, eventos de flota y spoilers de guías. Entra al servidor y presenta tu gamertag.",
       "link": "discord",
-      "linkLabel": "Unirse al Discord"
-    },
-    {
-      "id": "n4",
-      "title": "Próximo: más Tall Tales y World Events",
-      "date": "2026-08-01",
-      "badge": "En camino",
-      "featured": false,
-      "summary": "Estamos preparando más relatos, checklists de compañías y rutas de farmeo. ¡Ideas bienvenidas en Discord!",
-      "link": "",
-      "linkLabel": ""
+      "linkLabel": "Unirse al Discord",
+      "translations": {
+        "en": {
+          "title": "Open recruitment on Discord",
+          "badge": "Crew",
+          "summary": "Sail notices, alliances, fleet events and guide spoilers. Join the server and drop your gamertag.",
+          "linkLabel": "Join Discord"
+        }
+      }
     }
   ]
 }

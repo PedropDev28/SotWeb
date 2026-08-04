@@ -13,6 +13,11 @@ window.SOT_CONFIG = {
   discordInviteUrl: 'https://discord.gg/Cb6hzXd2Wx',
   /** Ruta base de assets desde la raíz del sitio (HTML en la raíz para Vercel) */
   assetBase: './src/assets',
+  /** Endpoint que sirve novedades oficiales (api/official-news.js en Vercel) */
+  officialNewsApi: '/api/official-news',
+  officialNewsHub: 'https://www.seaofthieves.com/news',
+  /** Proxy de estadísticas del perfil oficial (api/sot-profile.js en Vercel) */
+  sotProfileApi: '/api/sot-profile',
 };
 
 window.SOT_ASSET = function sotAsset(path) {

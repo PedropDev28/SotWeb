@@ -4,6 +4,10 @@
     return path === '' ? 'index.html' : path;
   }
 
+  function t(key) {
+    return window.SOTI18n?.t?.(key) ?? key;
+  }
+
   function updateNavAuth() {
     const session = window.SOTAuth?.getSession();
     const authLink = document.querySelector('[data-auth-link]');
@@ -11,16 +15,19 @@
 
     if (authLink) {
       if (session) {
-        authLink.textContent = 'Cerrar sesión';
+        authLink.textContent = t('nav.logout');
+        authLink.removeAttribute('data-i18n');
         authLink.href = '#';
-        authLink.addEventListener('click', (e) => {
+        authLink.onclick = (e) => {
           e.preventDefault();
           window.SOTAuth.logout();
           window.location.href = 'index.html';
-        });
+        };
       } else {
-        authLink.textContent = 'Entrar';
+        authLink.textContent = t('nav.login');
+        authLink.setAttribute('data-i18n', 'nav.login');
         authLink.href = 'auth.html';
+        authLink.onclick = null;
       }
     }
 
@@ -66,13 +73,12 @@
 
     if (!clientId) {
       if (hint) {
-        hint.textContent =
-          'Para activar Google, pon tu Client ID en src/assets/js/config.js';
+        hint.textContent = t('auth.googleHint');
         hint.classList.add('error');
       }
       mount.innerHTML = `
         <button type="button" class="btn btn-google" disabled>
-          Continuar con Google (sin configurar)
+          ${t('auth.googleDisabled')}
         </button>
       `;
       return;
@@ -88,7 +94,7 @@
             onSuccess?.();
           } catch (err) {
             if (hint) {
-              hint.textContent = err.message || 'Error con Google.';
+              hint.textContent = err.message || t('auth.googleError');
               hint.classList.add('error');
             }
           }
@@ -101,7 +107,7 @@
         width: mount.offsetWidth || 360,
         text: 'continue_with',
         shape: 'rectangular',
-        locale: 'es',
+        locale: window.SOTI18n?.getLocale?.() || 'es',
       });
     };
 

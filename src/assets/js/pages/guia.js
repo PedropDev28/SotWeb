@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const t = (key, vars) => window.SOTI18n?.t?.(key, vars) ?? key;
   const root = document.getElementById('guide-root');
   if (!root) return;
 
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const session = SOTAuth.getSession();
 
   if (!id) {
-    root.innerHTML = '<div class="empty-state">Falta el id de la guía en la URL.</div>';
+    root.innerHTML = `<div class="empty-state">${t('guide.missingId')}</div>`;
     return;
   }
 
@@ -15,8 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const guides = await SOTGuides.loadGuides();
     const guide = SOTGuides.getGuideById(guides, id);
     if (!guide) {
-      root.innerHTML =
-        '<div class="empty-state">No se encontró este relato. <a href="guias.html">Volver</a></div>';
+      root.innerHTML = `<div class="empty-state">${t('guide.notFound')}</div>`;
       return;
     }
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </label>
           `;
         })
-        .join('') || '<p><em>Sin marcas aún. Añade checklist en guides.json.</em></p>';
+        .join('') || `<p><em>${t('guide.emptyChecklist')}</em></p>`;
     }
 
     function updateProgressUi() {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (label) {
         label.textContent = session
           ? `${stats.done} / ${stats.total} · ${stats.percent}%`
-          : 'Inicia sesión para guardar el progreso.';
+          : t('guide.loginToSave');
       }
       if (fill) fill.style.width = `${stats.percent}%`;
     }
@@ -67,26 +67,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="guide-layout tale-stage">
         <div class="tale-reading">
           <div class="tale-toolbar">
-            <a class="back-link" href="guias.html">← Volver a guías</a>
+            <a class="back-link" href="guias.html">${t('guide.back')}</a>
             <span class="tale-page-indicator" data-page-indicator></span>
           </div>
 
           <div data-tale-book-host></div>
 
           <div class="tale-nav">
-            <button type="button" class="btn btn-ghost" id="prev-page">← Anterior</button>
-            <button type="button" class="btn" id="next-page">Siguiente →</button>
+            <button type="button" class="btn btn-ghost" id="prev-page">${t('guide.prev')}</button>
+            <button type="button" class="btn" id="next-page">${t('guide.next')}</button>
           </div>
-          <p class="tale-nav-hint">Arrastra la página · Q / E · flechas</p>
+          <p class="tale-nav-hint">${t('guide.navHint')}</p>
         </div>
 
         <aside class="panel progress-panel tale-log">
-          <h3>Diario de a bordo</h3>
+          <h3>${t('guide.logTitle')}</h3>
           <p style="margin-bottom: 1rem; color: rgba(243,230,200,0.75);" id="progress-label">
             ${
               session
                 ? `${stats.done} / ${stats.total} · ${stats.percent}%`
-                : 'Inicia sesión para guardar el progreso.'
+                : t('guide.loginToSave')
             }
           </p>
           <div class="progress-bar" style="margin-bottom: 1.25rem;">
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           ${
             session
               ? ''
-              : '<p style="margin-top:1rem"><a class="btn btn-block" href="auth.html">Entrar / Registrarse</a></p>'
+              : `<p style="margin-top:1rem"><a class="btn btn-block" href="auth.html">${t('guide.loginCta')}</a></p>`
           }
         </aside>
       </div>
@@ -142,6 +142,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     book.paint();
   } catch {
-    root.innerHTML = '<div class="empty-state">No se pudo abrir el libro del relato.</div>';
+    root.innerHTML = `<div class="empty-state">${t('guide.openError')}</div>`;
   }
 });

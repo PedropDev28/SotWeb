@@ -1,0 +1,46 @@
+[
+  {
+    "id": "sot-1839041357026563",
+    "title": "Sea of Thieves Release Notes - 3.8.1",
+    "date": "2026-07-23",
+    "badge": "Parche",
+    "featured": true,
+    "source": "official",
+    "summary": "Custom Seas: construye modos nuevos, cinemáticas y una forma distinta de vivir el mar. Emotes con Free Camera y más mejoras del Season 20.",
+    "link": "https://steamcommunity.com/games/1172620/announcements/detail/1839041357026563",
+    "linkLabel": "Leer anuncio oficial"
+  },
+  {
+    "id": "sot-1836506165578237",
+    "title": "This Month in Sea of Thieves: July 2026",
+    "date": "2026-07-07",
+    "badge": "Calendario",
+    "featured": false,
+    "source": "official",
+    "summary": "Fight Nights, recompensas y el calendario de actividades de julio. Lo que Rare tiene preparado para el mes.",
+    "link": "https://www.seaofthieves.com/news/this-month-july2026",
+    "linkLabel": "Leer en seaofthieves.com"
+  },
+  {
+    "id": "sot-1835871199315151",
+    "title": "All the Customary Fun in Season 20 Community Weekend on June 26th",
+    "date": "2026-06-23",
+    "badge": "Evento",
+    "featured": false,
+    "source": "official",
+    "summary": "Community Weekend de la Season 20: recompensas, Pop-Up Plunder y más motivos para zarpar en crew.",
+    "link": "https://www.seaofthieves.com/news",
+    "linkLabel": "Ver novedades oficiales"
+  },
+  {
+    "id": "sot-1835871199304623",
+    "title": "Personalise Your Pirate Playground in Sea of Thieves Season 20",
+    "date": "2026-06-18",
+    "badge": "Temporada",
+    "featured": false,
+    "source": "official",
+    "summary": "Llega Custom Seas, el modo estrella de la Season 20, para personalizar tu patio de juegos pirata.",
+    "link": "https://www.seaofthieves.com/news",
+    "linkLabel": "Ver novedades oficiales"
+  }
+]

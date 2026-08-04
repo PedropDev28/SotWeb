@@ -65,12 +65,16 @@
   };
 
   async function loadGuides() {
-    if (cache) return cache;
+    if (cache) return cache.map((g) => window.SOTI18n?.localizeItem?.(g) || g);
     const res = await fetch(window.SOT_ASSET('data/guides.json'), { cache: 'no-store' });
-    if (!res.ok) throw new Error('No se pudieron cargar las guías.');
+    if (!res.ok) throw new Error(window.SOTI18n?.t?.('guides.error') || 'No se pudieron cargar las guías.');
     const data = await res.json();
     cache = Array.isArray(data.guides) ? data.guides : [];
-    return cache;
+    return cache.map((g) => window.SOTI18n?.localizeItem?.(g) || g);
+  }
+
+  function clearCache() {
+    cache = null;
   }
 
   function getGuideById(guides, id) {
@@ -83,15 +87,19 @@
 
   function renderGuideCard(guide, stats) {
     const percent = stats?.percent ?? 0;
+    const cat = window.SOTI18n?.categoryLabel?.(guide.category) || guide.category || 'Guía';
+    const diff = window.SOTI18n?.difficultyLabel?.(guide.difficulty) || guide.difficulty || '—';
+    const progressAria =
+      window.SOTI18n?.t?.('guides.progressAria', { percent }) || `Progreso ${percent}%`;
     return `
       <a class="guide-tile" href="guia.html?id=${encodeURIComponent(guide.id)}">
         <div class="guide-meta">
-          <span class="tag">${escapeHtml(guide.category || 'Guía')}</span>
-          <span class="tag tag-gold">${escapeHtml(guide.difficulty || '—')}</span>
+          <span class="tag">${escapeHtml(cat)}</span>
+          <span class="tag tag-gold">${escapeHtml(diff)}</span>
         </div>
         <h3>${escapeHtml(guide.title)}</h3>
         <p>${escapeHtml(guide.summary || '')}</p>
-        <div class="progress-bar" aria-label="Progreso ${percent}%">
+        <div class="progress-bar" aria-label="${escapeHtml(progressAria)}">
           <span style="width:${percent}%"></span>
         </div>
       </a>
@@ -142,20 +150,25 @@
     pages.push({
       type: 'cover',
       left: {
-        kicker: 'Gran Relato',
+        kicker: window.SOTI18n?.t?.('guide.coverKicker') || 'Gran Relato',
         title: guide.title,
         content: `<p class="tale-cover-quote">«${escapeHtml(
-          guide.summary || 'Un diario de mar y misterio.'
+          guide.summary ||
+            window.SOTI18n?.t?.('guide.defaultQuote') ||
+            'Un diario de mar y misterio.'
         )}»</p>`,
         showOrnament: true,
-        badge: guide.category || 'Guía',
+        badge: window.SOTI18n?.categoryLabel?.(guide.category) || guide.category || 'Guía',
       },
       right: {
-        title: 'Al lector',
+        title: window.SOTI18n?.t?.('guide.toReader') || 'Al lector',
         titleClass: 'tale-title-sm',
         content: `
-          <p>Este libro guarda las pistas de la travesía. Pasa las hojas como en los Grandes Relatos y marca en el diario lo que ya hayas cumplido.</p>
-          <p><em>Dificultad:</em> ${escapeHtml(guide.difficulty || '—')}</p>
+          <p>${window.SOTI18n?.t?.('guide.coverIntro') ||
+            'Este libro guarda las pistas de la travesía. Pasa las hojas como en los Grandes Relatos y marca en el diario lo que ya hayas cumplido.'}</p>
+          <p><em>${window.SOTI18n?.t?.('guide.difficultyLabel') || 'Dificultad:'}</em> ${escapeHtml(
+            window.SOTI18n?.difficultyLabel?.(guide.difficulty) || guide.difficulty || '—'
+          )}</p>
         `,
         sketch: guide.coverSketch || 'compass',
       },
@@ -166,7 +179,8 @@
       pages.push({
         type: 'step',
         left: {
-          kicker: `Pista ${index + 1}`,
+          kicker:
+            window.SOTI18n?.t?.('guide.clue', { n: index + 1 }) || `Pista ${index + 1}`,
           title: step.title,
           titleClass: 'tale-title-sm',
           content: formatContent(step.content),
@@ -177,7 +191,8 @@
           notes: tips,
           content: tips.length
             ? ''
-            : '<p><em>Sin notas al margen en esta hoja. Añade tips en guides.json.</em></p>',
+            : window.SOTI18n?.t?.('guide.noNotes') ||
+              '<p><em>Sin notas al margen en esta hoja. Añade tips en guides.json.</em></p>',
         },
       });
     });
@@ -185,15 +200,17 @@
     pages.push({
       type: 'checklist',
       left: {
-        kicker: 'Diario de a bordo',
-        title: 'Marcas del relato',
+        kicker: window.SOTI18n?.t?.('guide.checklistKicker') || 'Diario de a bordo',
+        title: window.SOTI18n?.t?.('guide.checklistTitle') || 'Marcas del relato',
         titleClass: 'tale-title-sm',
-        content:
-          '<p>Tacha en tinta lo que ya hayas logrado. Si inicias sesión, el progreso queda guardado en tu cuenta.</p>',
+        content: `<p>${
+          window.SOTI18n?.t?.('guide.checklistIntro') ||
+          'Tacha en tinta lo que ya hayas logrado. Si inicias sesión, el progreso queda guardado en tu cuenta.'
+        }</p>`,
         showOrnament: true,
       },
       right: {
-        title: 'Lista del capitán',
+        title: window.SOTI18n?.t?.('guide.captainList') || 'Lista del capitán',
         titleClass: 'tale-title-sm',
         checklist: true,
       },
@@ -265,7 +282,9 @@
     if (side.notes?.length) {
       parts.push(`
         <div class="tale-notes">
-          <h4>Notas al margen</h4>
+          <h4>${escapeHtml(
+            window.SOTI18n?.t?.('guide.notesTitle') || 'Notas al margen'
+          )}</h4>
           <ul>${side.notes.map((n) => `<li>${escapeHtml(n)}</li>`).join('')}</ul>
         </div>
       `);
@@ -282,6 +301,7 @@
 
   window.SOTGuides = {
     loadGuides,
+    clearCache,
     getGuideById,
     categories,
     renderGuideCard,

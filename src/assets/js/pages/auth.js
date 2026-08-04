@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const t = (key) => window.SOTI18n?.t?.(key) ?? key;
+
   if (SOTAuth.getSession()) {
     window.location.href = 'cuenta.html';
     return;
@@ -11,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.auth-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
-      document.querySelectorAll('.auth-tab').forEach((t) => t.classList.remove('active'));
+      document.querySelectorAll('.auth-tab').forEach((tEl) => tEl.classList.remove('active'));
       tab.classList.add('active');
       const isLogin = tab.dataset.tab === 'login';
       loginForm.classList.toggle('hidden', !isLogin);
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         email: document.getElementById('login-email').value,
         password: document.getElementById('login-password').value,
       });
-      msg.textContent = '¡Bienvenido a bordo!';
+      msg.textContent = t('auth.welcome');
       msg.classList.add('success');
       window.location.href = 'cuenta.html';
     } catch (err) {
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         email: document.getElementById('reg-email').value,
         password: document.getElementById('reg-password').value,
       });
-      msg.textContent = 'Cuenta creada.';
+      msg.textContent = t('auth.created');
       msg.classList.add('success');
       window.location.href = 'cuenta.html';
     } catch (err) {
