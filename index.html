@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="home.title">Los Indomables — Sea of Thieves</title>
   <link rel="icon" type="image/png" href="./src/assets/img/logo.ico">
+  <meta name="description" content="Clan espanol de Sea of Thieves: guias paso a paso, progreso de Tall Tales, novedades oficiales y Discord de la tripulacion.">   <meta name="robots" content="index, follow">   <meta property="og:type" content="website">   <meta property="og:site_name" content="Los Indomables">   <meta property="og:title" content="Los Indomables — Sea of Thieves">   <meta property="og:description" content="Clan espanol de Sea of Thieves: guias paso a paso, progreso de Tall Tales, novedades oficiales y Discord de la tripulacion.">   <meta property="og:image" content="./src/assets/img/logo.png">   <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="theme-color" content="#050304">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="./src/assets/css/styles.css">
+  <link rel="stylesheet" href="./src/assets/css/burning-blade.css">
 </head>
 <body>
   <header class="site-header">
@@ -35,8 +41,26 @@
   <main>
     <section class="hero">
       <div class="hero-media" aria-hidden="true"></div>
+      <div class="bb-hero-light" aria-hidden="true"></div>
+      <div class="bb-hero-ship" aria-hidden="true">
+        <svg viewBox="0 0 520 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="currentColor" d="M258 8 262 250h-8L250 8z"/>
+          <path fill="currentColor" d="M154 8h96v210H154z" opacity=".9"/>
+          <path fill="currentColor" d="M262 30h92v182h-92z" opacity=".85"/>
+          <path fill="currentColor" d="M96 20 100 226h-6L90 20z"/>
+          <path fill="currentColor" d="M28 42h62v152H28z" opacity=".8"/>
+          <path fill="currentColor" d="M400 46 404 232h-6L394 46z"/>
+          <path fill="currentColor" d="M404 66h74v140h-74z" opacity=".8"/>
+          <path fill="currentColor" d="M14 236h492l-52 66q-8 10-22 10H88q-14 0-22-10z"/>
+          <path fill="currentColor" d="M0 246h520v14H0z" opacity=".85"/>
+        </svg>
+      </div>
+      <div class="bb-hero-sea" aria-hidden="true"></div>
+      <div class="bb-hero-fog" aria-hidden="true"></div>
       <div class="hero-embers" aria-hidden="true" id="hero-embers"></div>
+      <div class="bb-hero-cine" aria-hidden="true"></div>
       <div class="hero-content">
+        <p class="bb-kicker" data-i18n="home.heroKicker">Evento Burning Blade</p>
         <img class="hero-logo" src="./src/assets/img/logo.png" alt="Los Indomables" data-i18n-attr="alt:meta.brand">
         <h1 data-i18n="home.heroTitle">Donde el horizonte arde</h1>
         <p class="hero-lead" data-i18n="home.heroLead">
@@ -48,6 +72,10 @@
           <a class="btn btn-discord" href="#" data-discord-link data-i18n="home.ctaDiscord">Unirse al Discord</a>
         </div>
       </div>
+      <a class="bb-scroll-cue" href="#novedades" aria-hidden="true" tabindex="-1">
+        <em data-i18n="home.scrollCue">Zarpar</em>
+        <span></span>
+      </a>
     </section>
 
     <div class="alert-strip">
@@ -147,6 +175,7 @@
   <script src="./src/assets/js/search.js"></script>
   <script src="./src/assets/js/app.js"></script>
   <script src="./src/assets/js/atmosphere.js"></script>
+  <script src="./src/assets/js/fx.js"></script>
   <script src="./src/assets/js/pages/home.js"></script>
 </body>
 </html>

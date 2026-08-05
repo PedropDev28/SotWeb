@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function renderNews() {
     const newsMount = document.getElementById('home-news');
     if (!newsMount) return;
+    window.SOTFx?.skeletonCards(newsMount, 3);
     try {
       window.SOTNews?.clearCache?.();
       window.SOTNews?.syncOfficialHubLinks?.();
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const mount = document.getElementById('home-guides');
   if (!mount) return;
+  window.SOTFx?.skeletonCards(mount, 3);
 
   try {
     const guides = (await SOTGuides.loadGuides())

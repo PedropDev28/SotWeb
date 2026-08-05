@@ -34,6 +34,8 @@
       'footer.account': 'Cuenta',
 
       'home.title': 'Los Indomables — Sea of Thieves',
+      'home.heroKicker': 'Evento Burning Blade',
+      'home.scrollCue': 'Zarpar',
       'home.heroTitle': 'Donde el horizonte arde',
       'home.heroLead':
         'Guías, progreso de botín y una tripulación lista para alzar velas. Sube a bordo antes de que el mar se tiña de fuego.',
@@ -79,6 +81,8 @@
       'guides.filterAll': 'Todas',
       'guides.fallbackCategory': 'Guía',
       'guides.progressAria': 'Progreso {percent}%',
+      'guides.cardCta': 'Abrir guía',
+      'a11y.backToTop': 'Volver arriba',
 
       'guide.title': 'Guía — Los Indomables',
       'guide.opening': 'Abriendo la guía…',
@@ -174,6 +178,10 @@
       'auth.title': 'Entrar — Los Indomables',
       'auth.heading': 'Tripulación',
       'auth.lead': 'Entra con Discord o Google para guardar el progreso y proponer ediciones.',
+      'auth.sideTitle': 'Alza velas con la tripulación',
+      'auth.perk1': 'Progreso de Tall Tales y condecoraciones guardado',
+      'auth.perk2': 'Checklists sincronizadas en cualquier dispositivo',
+      'auth.perk3': 'Propón ediciones en las guías del clan',
       'auth.discordCta': 'Continuar con Discord',
       'auth.or': 'o',
       'auth.welcome': '¡Bienvenido a bordo!',
@@ -356,6 +364,8 @@
       'footer.account': 'Account',
 
       'home.title': 'Los Indomables — Sea of Thieves',
+      'home.heroKicker': 'Burning Blade event',
+      'home.scrollCue': 'Set sail',
       'home.heroTitle': 'Where the horizon burns',
       'home.heroLead':
         'Guides, loot progress and a crew ready to raise sail. Climb aboard before the sea turns to fire.',
@@ -401,6 +411,8 @@
       'guides.filterAll': 'All',
       'guides.fallbackCategory': 'Guide',
       'guides.progressAria': 'Progress {percent}%',
+      'guides.cardCta': 'Open guide',
+      'a11y.backToTop': 'Back to top',
 
       'guide.title': 'Guide — Los Indomables',
       'guide.opening': 'Opening the guide…',
@@ -496,6 +508,10 @@
       'auth.title': 'Sign in — Los Indomables',
       'auth.heading': 'Crew',
       'auth.lead': 'Sign in with Discord or Google to save progress and propose edits.',
+      'auth.sideTitle': 'Set sail with the crew',
+      'auth.perk1': 'Tall Tale progress and commendations saved',
+      'auth.perk2': 'Checklists synced across every device',
+      'auth.perk3': 'Propose edits to the clan guides',
       'auth.discordCta': 'Continue with Discord',
       'auth.or': 'or',
       'auth.welcome': 'Welcome aboard!',

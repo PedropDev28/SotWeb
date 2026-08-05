@@ -111,6 +111,10 @@
     return cache.map((g) => window.SOTI18n?.localizeItem?.(g) || g);
   }
 
+  function clearCache() {
+    cache = null;
+  }
+
   function stripHtml(str) {
     return String(str || '')
       .replace(/<[^>]*>/g, ' ')
@@ -154,23 +158,51 @@
     return [...new Set(guides.map((g) => g.category).filter(Boolean))];
   }
 
+  /* Emblemas grabados que hacen de marca de agua en cada tarjeta */
+  const CARD_MARKS = {
+    default:
+      '<path d="M32 6 44 18v14c0 12-6 20-12 26-6-6-12-14-12-26V18z"/><path d="M32 20v20M24 28h16"/>',
+    'Tall Tales':
+      '<path d="M32 8 40 24l18 3-13 12 3 17-16-8-16 8 3-17L6 27l18-3z"/>',
+    'World Events':
+      '<circle cx="32" cy="32" r="22"/><path d="M32 10v44M10 32h44M32 4l4 8h-8zM43 21l-9 9-9-9"/>',
+    Compañías:
+      '<circle cx="32" cy="32" r="21"/><path d="M32 11v42M11 32h42M20 20l24 24M44 20 20 44"/>',
+  };
+
+  function cardMark(category) {
+    const path = CARD_MARKS[category] || CARD_MARKS.default;
+    return (
+      '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" ' +
+      'stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">' +
+      path +
+      '</svg>'
+    );
+  }
+
   function renderGuideCard(guide, stats) {
     const percent = stats?.percent ?? 0;
     const cat = window.SOTI18n?.categoryLabel?.(guide.category) || guide.category || 'Guía';
     const diff = window.SOTI18n?.difficultyLabel?.(guide.difficulty) || guide.difficulty || '—';
     const progressAria =
       window.SOTI18n?.t?.('guides.progressAria', { percent }) || `Progreso ${percent}%`;
+    const cta = window.SOTI18n?.t?.('guides.cardCta') || 'Abrir guía';
     return `
       <a class="guide-tile" href="guia.html?id=${encodeURIComponent(guide.id)}">
+        <span class="guide-tile-mark" aria-hidden="true">${cardMark(guide.category)}</span>
         <div class="guide-meta">
           <span class="tag">${escapeHtml(cat)}</span>
           <span class="tag tag-gold">${escapeHtml(diff)}</span>
         </div>
         <h3>${escapeHtml(guide.title)}</h3>
         <p>${escapeHtml(guide.summary || '')}</p>
-        <div class="progress-bar" aria-label="${escapeHtml(progressAria)}">
-          <span style="width:${percent}%"></span>
+        <div class="guide-tile-foot">
+          <div class="progress-bar" aria-label="${escapeHtml(progressAria)}">
+            <span style="width:${percent}%"></span>
+          </div>
+          <span class="guide-tile-pct">${percent}%</span>
         </div>
+        <span class="guide-tile-cta">${escapeHtml(cta)}<i aria-hidden="true">→</i></span>
       </a>
     `;
   }
@@ -379,5 +411,8 @@
     buildTalePages,
     renderPageSide,
     sketchSvg,
+    stripHtml,
+    guideSearchBlob,
+    matchesQuery,
   };
 })();

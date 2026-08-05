@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         return SOTGuides.renderGuideCard(g, stats);
       })
       .join('');
+
+    window.SOTFx?.refresh(list.parentElement || document);
   }
+
+  window.SOTFx?.skeletonCards(list, 6);
 
   try {
     guides = await SOTGuides.loadGuides();

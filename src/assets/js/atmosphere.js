@@ -48,7 +48,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    ensureAtmosphere();
+    // fx.js dibuja brasas y humo en canvas; solo usamos los <span> como respaldo.
+    if (!window.SOTFx) ensureAtmosphere();
     swayBrand();
     observeReveals(document);
   });

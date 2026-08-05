@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="auth.title">Entrar — Los Indomables</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="theme-color" content="#050304">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="./src/assets/css/styles.css">
+  <link rel="stylesheet" href="./src/assets/css/burning-blade.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -33,11 +38,20 @@
   </header>
 
   <main class="auth-wrap">
-    <div class="panel auth-card auth-oauth">
-      <h1 style="font-family: var(--font-display); color: var(--brass); font-size: 1.8rem; margin-bottom: 0.35rem;" data-i18n="auth.heading">
-        Tripulación
-      </h1>
-      <p style="margin-bottom: 1.5rem; color: rgba(243,230,200,0.75);" data-i18n="auth.lead">
+    <section class="auth-side" aria-hidden="true">
+      <img class="auth-crest" src="./src/assets/img/logo.png" alt="">
+      <p class="bb-kicker" data-i18n="home.heroKicker">Evento Burning Blade</p>
+      <h2 data-i18n="auth.sideTitle">Alza velas con la tripulación</h2>
+      <ul class="auth-perks">
+        <li data-i18n="auth.perk1">Progreso de Tall Tales y condecoraciones guardado</li>
+        <li data-i18n="auth.perk2">Checklists sincronizadas en cualquier dispositivo</li>
+        <li data-i18n="auth.perk3">Propón ediciones en las guías del clan</li>
+      </ul>
+    </section>
+
+    <div class="panel auth-card auth-oauth bb-ornate">
+      <h1 data-i18n="auth.heading">Tripulación</h1>
+      <p class="auth-lead" data-i18n="auth.lead">
         Entra con Discord o Google para guardar el progreso y proponer ediciones.
       </p>
 
@@ -70,6 +84,7 @@
   <script src="./src/assets/js/search.js"></script>
   <script src="./src/assets/js/app.js"></script>
   <script src="./src/assets/js/atmosphere.js"></script>
+  <script src="./src/assets/js/fx.js"></script>
   <script src="./src/assets/js/pages/auth.js"></script>
 </body>
 </html>
