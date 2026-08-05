@@ -64,12 +64,44 @@
       </svg>`,
   };
 
+  async function loadOverlays() {
+    const endpoint = window.SOT_CONFIG?.guidesOverlayApi;
+    if (!endpoint) return {};
+    try {
+      const res = await fetch(endpoint, { cache: 'no-store' });
+      if (!res.ok) return {};
+      const data = await res.json();
+      return data?.guides && typeof data.guides === 'object' ? data.guides : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function mergeGuide(base, overlay) {
+    if (!overlay) return base;
+    return {
+      ...base,
+      ...overlay,
+      id: base.id,
+      steps: Array.isArray(overlay.steps) ? overlay.steps : base.steps,
+      checklist: Array.isArray(overlay.checklist) ? overlay.checklist : base.checklist,
+    };
+  }
+
   async function loadGuides() {
     if (cache) return cache.map((g) => window.SOTI18n?.localizeItem?.(g) || g);
     const res = await fetch(window.SOT_ASSET('data/guides.json'), { cache: 'no-store' });
     if (!res.ok) throw new Error(window.SOTI18n?.t?.('guides.error') || 'No se pudieron cargar las guías.');
     const data = await res.json();
-    cache = Array.isArray(data.guides) ? data.guides : [];
+    const base = Array.isArray(data.guides) ? data.guides : [];
+    const overlays = await loadOverlays();
+    cache = base.map((guide) => mergeGuide(guide, overlays[guide.id]));
+    // Guías nuevas solo en overlay (aprobadas sin estar en JSON base)
+    Object.keys(overlays).forEach((id) => {
+      if (!cache.find((g) => g.id === id) && overlays[id]?.title) {
+        cache.push(overlays[id]);
+      }
+    });
     return cache.map((g) => window.SOTI18n?.localizeItem?.(g) || g);
   }
 

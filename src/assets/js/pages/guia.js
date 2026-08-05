@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
   const session = SOTAuth.getSession();
+  const editMode = params.get('edit') === '1';
 
   if (!id) {
     root.innerHTML = `<div class="empty-state">${t('guide.missingId')}</div>`;
@@ -21,17 +22,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     document.title = `${guide.title} — Los Indomables`;
-    const pages = SOTGuides.buildTalePages(guide);
+
+    if (editMode) {
+      if (!session) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      window.SOTGuideEditor?.mount?.(root, guide, session);
+      return;
+    }
+
     const progress = session
       ? SOTProgress.getGuideProgress(session.id, guide.id)
       : { checked: {} };
+
+    const steps = guide.steps || [];
+    const cat = window.SOTI18n?.categoryLabel?.(guide.category) || guide.category || '';
+    const diff = window.SOTI18n?.difficultyLabel?.(guide.difficulty) || guide.difficulty || '';
 
     function checklistHtml() {
       return (guide.checklist || [])
         .map((item) => {
           const checked = !!progress.checked?.[item.id];
           return `
-            <label class="${checked ? 'done' : ''}">
+            <label class="walk-check ${checked ? 'done' : ''}">
               <input
                 type="checkbox"
                 data-item="${SOTGuides.escapeHtml(item.id)}"
@@ -42,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </label>
           `;
         })
-        .join('') || `<p><em>${t('guide.emptyChecklist')}</em></p>`;
+        .join('') || `<p class="muted"><em>${t('guide.emptyChecklist')}</em></p>`;
     }
 
     function updateProgressUi() {
@@ -63,26 +77,101 @@ document.addEventListener('DOMContentLoaded', async () => {
       ? SOTProgress.getGuideStats(session.id, guide)
       : { done: 0, total: (guide.checklist || []).length, percent: 0 };
 
+    const toc = steps
+      .map(
+        (step, i) => `
+        <li>
+          <a href="#step-${SOTGuides.escapeHtml(step.id || String(i + 1))}">
+            <span class="toc-num">${i + 1}</span>
+            ${SOTGuides.escapeHtml(step.title)}
+          </a>
+        </li>`
+      )
+      .join('');
+
+    const stepsHtml = steps
+      .map((step, i) => {
+        const sid = step.id || `step-${i + 1}`;
+        const tips = (step.tips || [])
+          .map((tip) => `<li>${SOTGuides.escapeHtml(tip)}</li>`)
+          .join('');
+        const prev = i > 0 ? steps[i - 1] : null;
+        const next = i < steps.length - 1 ? steps[i + 1] : null;
+        return `
+          <article class="walk-step reveal-on-scroll" id="step-${SOTGuides.escapeHtml(sid)}">
+            <header class="walk-step-head">
+              <span class="walk-step-badge">${t('guide.stepLabel', { n: i + 1 })}</span>
+              <h2>${SOTGuides.escapeHtml(step.title)}</h2>
+            </header>
+            ${
+              step.sketch
+                ? `<div class="walk-sketch" aria-hidden="true">${SOTGuides.sketchSvg(step.sketch)}</div>`
+                : ''
+            }
+            <div class="walk-body">${SOTGuides.formatContent(step.content)}</div>
+            ${
+              tips
+                ? `<aside class="walk-tips"><h3>${t('guide.notesTitle')}</h3><ul>${tips}</ul></aside>`
+                : ''
+            }
+            <nav class="walk-step-nav">
+              ${
+                prev
+                  ? `<a class="btn btn-ghost" href="#step-${SOTGuides.escapeHtml(prev.id || String(i))}">${t('guide.prevStep')}</a>`
+                  : `<span></span>`
+              }
+              ${
+                next
+                  ? `<a class="btn" href="#step-${SOTGuides.escapeHtml(next.id || String(i + 2))}">${t('guide.nextStep')}</a>`
+                  : `<a class="btn" href="#checklist">${t('guide.toChecklist')}</a>`
+              }
+            </nav>
+          </article>
+        `;
+      })
+      .join('');
+
     root.innerHTML = `
-      <div class="guide-layout tale-stage">
-        <div class="tale-reading">
-          <div class="tale-toolbar">
+      <div class="guide-layout walk-layout">
+        <div class="walk-main">
+          <div class="walk-toolbar">
             <a class="back-link" href="guias.html">${t('guide.back')}</a>
-            <span class="tale-page-indicator" data-page-indicator></span>
+            <div class="walk-toolbar-actions">
+              ${
+                session
+                  ? `<a class="btn btn-ghost" href="guia.html?id=${encodeURIComponent(guide.id)}&edit=1">${t('guide.edit')}</a>`
+                  : ''
+              }
+            </div>
           </div>
 
-          <div data-tale-book-host></div>
+          <header class="walk-hero reveal-on-scroll">
+            <div class="guide-meta">
+              ${cat ? `<span class="tag">${SOTGuides.escapeHtml(cat)}</span>` : ''}
+              ${diff ? `<span class="tag tag-gold">${SOTGuides.escapeHtml(diff)}</span>` : ''}
+            </div>
+            <h1>${SOTGuides.escapeHtml(guide.title)}</h1>
+            <p class="walk-summary">${SOTGuides.escapeHtml(guide.summary || '')}</p>
+            ${
+              guide.coverSketch
+                ? `<div class="walk-cover-sketch" aria-hidden="true">${SOTGuides.sketchSvg(guide.coverSketch)}</div>`
+                : ''
+            }
+          </header>
 
-          <div class="tale-nav">
-            <button type="button" class="btn btn-ghost" id="prev-page">${t('guide.prev')}</button>
-            <button type="button" class="btn" id="next-page">${t('guide.next')}</button>
+          <nav class="walk-toc panel reveal-on-scroll" aria-label="${t('guide.tocLabel')}">
+            <h2>${t('guide.tocTitle')}</h2>
+            <ol>${toc}</ol>
+          </nav>
+
+          <div class="walk-steps">
+            ${stepsHtml}
           </div>
-          <p class="tale-nav-hint">${t('guide.navHint')}</p>
         </div>
 
-        <aside class="panel progress-panel tale-log">
+        <aside class="panel progress-panel walk-aside" id="checklist">
           <h3>${t('guide.logTitle')}</h3>
-          <p style="margin-bottom: 1rem; color: rgba(243,230,200,0.75);" id="progress-label">
+          <p class="muted" id="progress-label">
             ${
               session
                 ? `${stats.done} / ${stats.total} · ${stats.percent}%`
@@ -92,7 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="progress-bar" style="margin-bottom: 1.25rem;">
             <span id="progress-fill" style="width:${stats.percent}%"></span>
           </div>
-          <div class="checklist" id="side-checklist">${checklistHtml()}</div>
+          <div class="checklist walk-checklist" id="side-checklist">${checklistHtml()}</div>
           ${
             session
               ? ''
@@ -102,8 +191,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
-    document.body.classList.add('tale-view');
-
     if (session) {
       root.addEventListener('change', (e) => {
         const input = e.target.closest('input[type="checkbox"][data-item]');
@@ -111,36 +198,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         SOTProgress.setChecked(session.id, guide.id, input.dataset.item, input.checked);
         progress.checked[input.dataset.item] = input.checked;
         updateProgressUi();
-        root.querySelectorAll(`input[data-item="${input.dataset.item}"]`).forEach((box) => {
-          box.checked = input.checked;
-          box.closest('label')?.classList.toggle('done', input.checked);
-        });
+        const label = input.closest('label');
+        label?.classList.toggle('done', input.checked);
+        label?.classList.add('check-pop');
+        setTimeout(() => label?.classList.remove('check-pop'), 450);
       });
     }
 
-    const book = SOTTaleBook.createTaleBook({
-      root,
-      pages,
-      renderSide: SOTGuides.renderPageSide,
-      renderExtras: () => {
-        const bookChecklist = document.getElementById('checklist');
-        if (bookChecklist) bookChecklist.innerHTML = checklistHtml();
-        const side = document.getElementById('side-checklist');
-        if (side) side.innerHTML = checklistHtml();
-        updateProgressUi();
-      },
-    });
-
-    document.getElementById('prev-page').addEventListener('click', () => book.prev());
-    document.getElementById('next-page').addEventListener('click', () => book.next());
-
-    document.addEventListener('keydown', (e) => {
-      if (e.target.matches('input, textarea')) return;
-      if (e.key === 'q' || e.key === 'Q' || e.key === 'ArrowLeft') book.prev();
-      if (e.key === 'e' || e.key === 'E' || e.key === 'ArrowRight') book.next();
-    });
-
-    book.paint();
+    window.SOTAtmosphere?.observeReveals?.(root);
   } catch {
     root.innerHTML = `<div class="empty-state">${t('guide.openError')}</div>`;
   }

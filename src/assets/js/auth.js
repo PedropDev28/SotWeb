@@ -1,26 +1,14 @@
 (function () {
-  const USERS_KEY = 'sot_users';
   const SESSION_KEY = 'sot_session';
-
-  function readUsers() {
-    try {
-      return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-    } catch {
-      return [];
-    }
-  }
-
-  function writeUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
 
   function setSession(user) {
     const session = {
       id: user.id,
       name: user.name,
-      email: user.email,
+      email: user.email || '',
       avatar: user.avatar || '',
-      provider: user.provider || 'local',
+      provider: user.provider,
+      discordId: user.discordId || '',
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
     return session;
@@ -38,89 +26,43 @@
     localStorage.removeItem(SESSION_KEY);
   }
 
-  function findByEmail(email) {
-    return readUsers().find((u) => u.email.toLowerCase() === email.toLowerCase());
-  }
-
-  async function hashPassword(password) {
-    const data = new TextEncoder().encode(password);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-    return Array.from(new Uint8Array(digest))
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
-  }
-
   function t(key) {
     return window.SOTI18n?.t?.(key) ?? key;
   }
 
-  async function register({ name, email, password }) {
-    if (!name?.trim() || !email?.trim() || !password) {
-      throw new Error(t('auth.fillAll'));
-    }
-    if (password.length < 6) {
-      throw new Error(t('auth.passwordShort'));
-    }
-    if (findByEmail(email)) {
-      throw new Error(t('auth.emailExists'));
-    }
-
-    const user = {
-      id: crypto.randomUUID(),
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      passwordHash: await hashPassword(password),
-      provider: 'local',
-      avatar: '',
-      createdAt: new Date().toISOString(),
-    };
-
-    const users = readUsers();
-    users.push(user);
-    writeUsers(users);
-    return setSession(user);
-  }
-
-  async function login({ email, password }) {
-    const user = findByEmail(email || '');
-    if (!user || user.provider !== 'local') {
-      throw new Error(t('auth.badCredentials'));
-    }
-    const hash = await hashPassword(password || '');
-    if (hash !== user.passwordHash) {
-      throw new Error(t('auth.badCredentials'));
-    }
-    return setSession(user);
-  }
-
   function loginWithGoogleProfile(profile) {
-    if (!profile?.email) {
+    if (!profile?.email && !profile?.sub) {
       throw new Error(t('auth.googleProfile'));
     }
 
-    let user = findByEmail(profile.email);
-    if (!user) {
-      user = {
-        id: crypto.randomUUID(),
-        name: profile.name || profile.email.split('@')[0],
-        email: profile.email.toLowerCase(),
-        passwordHash: '',
-        provider: 'google',
-        avatar: profile.picture || '',
-        createdAt: new Date().toISOString(),
-      };
-      const users = readUsers();
-      users.push(user);
-      writeUsers(users);
-    } else {
-      user.name = profile.name || user.name;
-      user.avatar = profile.picture || user.avatar;
-      user.provider = 'google';
-      const users = readUsers().map((u) => (u.id === user.id ? user : u));
-      writeUsers(users);
+    const sub = profile.sub || profile.email.toLowerCase();
+    return setSession({
+      id: `google:${sub}`,
+      name: profile.name || (profile.email || 'Pirata').split('@')[0],
+      email: (profile.email || '').toLowerCase(),
+      avatar: profile.picture || '',
+      provider: 'google',
+    });
+  }
+
+  function loginWithDiscordProfile(profile) {
+    if (!profile?.id) {
+      throw new Error(t('auth.discordProfile'));
     }
 
-    return setSession(user);
+    const username = profile.global_name || profile.username || 'Pirata';
+    const avatar = profile.avatar
+      ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=128`
+      : '';
+
+    return setSession({
+      id: `discord:${profile.id}`,
+      name: username,
+      email: profile.email || '',
+      avatar,
+      provider: 'discord',
+      discordId: String(profile.id),
+    });
   }
 
   function parseJwt(token) {
@@ -140,7 +82,40 @@
       email: payload.email,
       name: payload.name,
       picture: payload.picture,
+      sub: payload.sub,
     });
+  }
+
+  function consumeDiscordCallback() {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get('discord');
+    if (!raw) return null;
+
+    try {
+      const profile = JSON.parse(decodeURIComponent(raw));
+      const session = loginWithDiscordProfile(profile);
+      params.delete('discord');
+      params.delete('error');
+      const clean = `${window.location.pathname}${params.toString() ? `?${params}` : ''}${window.location.hash}`;
+      window.history.replaceState({}, '', clean);
+      return session;
+    } catch {
+      throw new Error(t('auth.discordProfile'));
+    }
+  }
+
+  function startDiscordLogin() {
+    const clientId = window.SOT_CONFIG?.discordClientId;
+    if (!clientId) {
+      throw new Error(t('auth.discordHint'));
+    }
+    const redirectUri = `${window.location.origin}/api/auth-discord`;
+    const url = new URL('https://discord.com/api/oauth2/authorize');
+    url.searchParams.set('client_id', clientId);
+    url.searchParams.set('redirect_uri', redirectUri);
+    url.searchParams.set('response_type', 'code');
+    url.searchParams.set('scope', 'identify email');
+    window.location.href = url.toString();
   }
 
   function logout() {
@@ -156,13 +131,28 @@
     return session;
   }
 
+  function isAdmin(session = getSession()) {
+    if (!session) return false;
+    const emails = (window.SOT_CONFIG?.adminGoogleEmails || []).map((e) => e.toLowerCase());
+    const discordIds = (window.SOT_CONFIG?.adminDiscordIds || []).map(String);
+    if (session.provider === 'google' && session.email && emails.includes(session.email.toLowerCase())) {
+      return true;
+    }
+    if (session.provider === 'discord' && session.discordId && discordIds.includes(String(session.discordId))) {
+      return true;
+    }
+    return false;
+  }
+
   window.SOTAuth = {
-    register,
-    login,
     logout,
     getSession,
     requireAuth,
     handleGoogleCredential,
     loginWithGoogleProfile,
+    loginWithDiscordProfile,
+    consumeDiscordCallback,
+    startDiscordLogin,
+    isAdmin,
   };
 })();

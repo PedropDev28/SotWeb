@@ -1,62 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
   const t = (key) => window.SOTI18n?.t?.(key) ?? key;
+  const msg = document.getElementById('form-msg');
+
+  try {
+    if (SOTAuth.consumeDiscordCallback()) {
+      window.location.href = 'cuenta.html';
+      return;
+    }
+  } catch (err) {
+    if (msg) {
+      msg.textContent = err.message || t('auth.discordError');
+      msg.classList.add('error');
+    }
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('error') === 'discord' && msg) {
+    msg.textContent = t('auth.discordError');
+    msg.classList.add('error');
+  }
 
   if (SOTAuth.getSession()) {
     window.location.href = 'cuenta.html';
     return;
   }
 
-  const msg = document.getElementById('form-msg');
-  const loginForm = document.getElementById('form-login');
-  const registerForm = document.getElementById('form-register');
-  if (!msg || !loginForm || !registerForm) return;
-
-  document.querySelectorAll('.auth-tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.auth-tab').forEach((tEl) => tEl.classList.remove('active'));
-      tab.classList.add('active');
-      const isLogin = tab.dataset.tab === 'login';
-      loginForm.classList.toggle('hidden', !isLogin);
-      registerForm.classList.toggle('hidden', isLogin);
-      msg.textContent = '';
-      msg.className = 'form-msg';
+  const discordBtn = document.getElementById('discord-login');
+  if (discordBtn) {
+    discordBtn.addEventListener('click', () => {
+      try {
+        SOTAuth.startDiscordLogin();
+      } catch (err) {
+        if (msg) {
+          msg.textContent = err.message || t('auth.discordHint');
+          msg.classList.add('error');
+        }
+      }
     });
-  });
-
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msg.className = 'form-msg';
-    try {
-      await SOTAuth.login({
-        email: document.getElementById('login-email').value,
-        password: document.getElementById('login-password').value,
-      });
-      msg.textContent = t('auth.welcome');
-      msg.classList.add('success');
-      window.location.href = 'cuenta.html';
-    } catch (err) {
-      msg.textContent = err.message;
-      msg.classList.add('error');
-    }
-  });
-
-  registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msg.className = 'form-msg';
-    try {
-      await SOTAuth.register({
-        name: document.getElementById('reg-name').value,
-        email: document.getElementById('reg-email').value,
-        password: document.getElementById('reg-password').value,
-      });
-      msg.textContent = t('auth.created');
-      msg.classList.add('success');
-      window.location.href = 'cuenta.html';
-    } catch (err) {
-      msg.textContent = err.message;
-      msg.classList.add('error');
-    }
-  });
+  }
 
   SOTApp.initGoogleButton(() => {
     window.location.href = 'cuenta.html';

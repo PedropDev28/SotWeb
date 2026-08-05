@@ -32,48 +32,20 @@
   </header>
 
   <main class="auth-wrap">
-    <div class="panel auth-card">
+    <div class="panel auth-card auth-oauth">
       <h1 style="font-family: var(--font-display); color: var(--brass); font-size: 1.8rem; margin-bottom: 0.35rem;" data-i18n="auth.heading">
         Tripulación
       </h1>
-      <p style="margin-bottom: 1.25rem; color: rgba(243,230,200,0.75);" data-i18n="auth.lead">
-        Entra para guardar el progreso de tus guías.
+      <p style="margin-bottom: 1.5rem; color: rgba(243,230,200,0.75);" data-i18n="auth.lead">
+        Entra con Discord o Google para guardar el progreso y proponer ediciones.
       </p>
 
-      <div class="auth-tabs" role="tablist">
-        <button type="button" class="auth-tab active" data-tab="login" data-i18n="auth.tabLogin">Iniciar sesión</button>
-        <button type="button" class="auth-tab" data-tab="register" data-i18n="auth.tabRegister">Registrarse</button>
-      </div>
-
-      <form class="form" id="form-login">
-        <div class="form-group">
-          <label for="login-email" data-i18n="auth.email">Correo</label>
-          <input id="login-email" type="email" autocomplete="email" required>
-        </div>
-        <div class="form-group">
-          <label for="login-password" data-i18n="auth.password">Contraseña</label>
-          <input id="login-password" type="password" autocomplete="current-password" required>
-        </div>
-        <button class="btn btn-block" type="submit" data-i18n="auth.submitLogin">Entrar</button>
-      </form>
-
-      <form class="form hidden" id="form-register">
-        <div class="form-group">
-          <label for="reg-name" data-i18n="auth.pirateName">Nombre de pirata</label>
-          <input id="reg-name" type="text" autocomplete="nickname" required>
-        </div>
-        <div class="form-group">
-          <label for="reg-email" data-i18n="auth.email">Correo</label>
-          <input id="reg-email" type="email" autocomplete="email" required>
-        </div>
-        <div class="form-group">
-          <label for="reg-password" data-i18n="auth.password">Contraseña</label>
-          <input id="reg-password" type="password" autocomplete="new-password" minlength="6" required>
-        </div>
-        <button class="btn btn-block" type="submit" data-i18n="auth.submitRegister">Crear cuenta</button>
-      </form>
+      <button type="button" class="btn btn-discord btn-block" id="discord-login" data-i18n="auth.discordCta">
+        Continuar con Discord
+      </button>
 
       <div class="form-divider" data-i18n="auth.or">o</div>
+
       <div id="google-btn"></div>
       <p class="form-msg" id="google-hint"></p>
       <p class="form-msg" id="form-msg"></p>
@@ -95,6 +67,7 @@
   <script src="./src/assets/js/i18n.js"></script>
   <script src="./src/assets/js/auth.js"></script>
   <script src="./src/assets/js/app.js"></script>
+  <script src="./src/assets/js/atmosphere.js"></script>
   <script src="./src/assets/js/pages/auth.js"></script>
 </body>
 </html>

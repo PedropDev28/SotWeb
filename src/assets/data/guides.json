@@ -3,90 +3,192 @@
   "guides": [
     {
       "id": "tall-tale-shroudbreaker",
-      "title": "El Rompehielo",
+      "title": "El Rompevelos",
       "category": "Tall Tales",
       "difficulty": "Media",
       "coverSketch": "compass",
-      "summary": "Primera hoja de la saga hacia las Shores of Gold. Sigue el diario y recupera el artefacto.",
+      "summary": "Primera Tall Tale de Orillas de Oro. Recupera el diario del Ala de la Urraca, el Tótem, abre la Bóveda Antigua y entrega el Rompevelos.",
       "steps": [
         {
           "id": "step-1",
-          "title": "El extraño de la taberna",
+          "title": "Empezar el relato",
           "sketch": "skull",
-          "content": "En la taberna de cualquier <strong>Outpost</strong> espera el Mysterious Stranger. Habla con él, vota el relato y recoge el libro de la mesa.\n\nGuarda el diario a bordo: cada dibujo es una pista.",
+          "content": "En la taberna de cualquier <strong>Outpost</strong> habla con el Mysterious Stranger. A su lado hay el libro de la Tall Tale: vota el relato con la tripulación.\n\nEl libro pasa al menú radial de mapas. Escucha al Extraño: busca el artefacto <strong>Rompevelos</strong>, oculto en una Bóveda Antigua. Para abrirla necesitas un Tótem; el Tótem está en un Cofre Antiguo; el cofre se localiza con el diario de a bordo del Señor Pirata.",
           "tips": [
-            "El libro aparece en el menú radial de mapas.",
-            "Lee todas las páginas antes de zarpar."
+            "No zarpes sin leer las primeras páginas del libro.",
+            "Puedes empezar esta Tall Tale desde cualquier Outpost."
           ]
         },
         {
           "id": "step-2",
-          "title": "Pistas sobre el agua",
-          "sketch": "map",
-          "content": "Compara las ilustraciones del diario con la forma de las islas en la mesa de mapas. Cuando el dibujo coincida, atraca y busca el lugar marcado.\n\nExcava donde la pista lo indique.",
+          "title": "Diario del Ala de la Urraca",
+          "sketch": "ship",
+          "content": "El libro cuenta que el diario se hundió con el <strong>Ala de la Urraca</strong> (Magpie's Wing) en una isla inexplorada entre Twisted Spire y Crook's Hollow: coordenadas <strong>N13</strong>.\n\nMarca N13 en la mesa de mapas. Busca un islote con una planta roja brillante. En el noroeste de la isla hay un diario opcional (condecoraciones). Sumérgete por ese mismo lado hasta el camarote del capitán y recoge el diario de a bordo: se añaden páginas al libro.",
           "tips": [
-            "Gira el libro: a veces el dibujo está orientado distinto al mapa.",
-            "Las ruinas y piedras talladas suelen ser el punto clave."
+            "La condecoración «El viaje perdido» se desbloquea al coger el diario.",
+            "Hay más diarios en Plunder, Thieves' Haven, Devil's Ridge y Ancient Spire si buscas todas las condecoraciones."
           ]
         },
         {
           "id": "step-3",
-          "title": "El artefacto y el regreso",
-          "sketch": "key",
-          "content": "Resuelve el enigma final del artefacto. Con el trofeo en mano, vuelve al Mysterious Stranger y cierra el relato.",
+          "title": "El Cofre Antiguo",
+          "sketch": "map",
+          "content": "Las nuevas páginas narran la huida del Ala de la Urraca ante la Burning Blade. El Señor Pirata arrojó el cofre por la borda: el diario da isla de partida, rumbos y descripciones.\n\nSigue la ruta en la mesa de mapas. Las islas del texto son referencias, no siempre el destino. El cofre brilla bajo el agua a unos metros de la orilla del lado indicado (norte/sur; «arriba» ≈ norte, «abajo» ≈ sur).\n\nÁbrelo a bordo: obtienes el <strong>Tótem</strong> y más páginas que señalan la bóveda.",
           "tips": [
-            "Si te atascas, revisa si el libro ganó páginas nuevas."
+            "Cadena o grupo de islas → suele ser Snake Island; fuerte → un Fort; altos arcos → Thieves' Haven; islas bajas → Old Salts Atoll o similar.",
+            "Sitios frecuentes del cofre: Paradise Spring, Snake Island, Devil's Ridge, Lookout Point, Chicken Isle, Fool's Lagoon, Cutlass Cay."
+          ]
+        },
+        {
+          "id": "step-4",
+          "title": "Tótem y Bóveda Antigua",
+          "sketch": "key",
+          "content": "Cada tótem abre una bóveda distinta. Las páginas del libro dan la pista; si falla, usa esta tabla:\n\n• Jabalí → Devil's Ridge\n• Cangrejo → isla inexplorada N13\n• Luna → Crescent Isle\n• Escarabajo → Crook's Hollow\n• Serpiente → Mermaid's Hideaway\n• Tiburón → Kraken's Fall\n\nLa «cerradura» es una roca plana con un hueco cuadrado. Sostén el tótem y camina cerca: cuando aparezca «Colocar tótem», ya lo tienes.",
+          "tips": [
+            "Devil's Ridge: playa sureste, pinturas de jabalí; candado a la izquierda.",
+            "N13: nadar junto a la planta roja (oeste) → cueva; candado detrás del banco de trabajo.",
+            "Crescent Isle: cueva norte del centro hueco.",
+            "Crook's Hollow: cueva sur tras la cascada, pinturas de escarabajo.",
+            "Mermaid's Hideaway: arco noroeste; bóveda al este tras colocar el tótem.",
+            "Kraken's Fall: bajo el arco principal, norte, cerca de pinturas de tiburón."
+          ]
+        },
+        {
+          "id": "step-5",
+          "title": "Rompecabezas de la bóveda",
+          "sketch": "compass",
+          "content": "Dentro hay un altar con cuatro braseros. <strong>No los enciendas aún</strong>: primero estudia la última página del libro (solución).\n\nAl encender el altar, la sala se inunda. Tienes una sola oportunidad: si mueres, fallas el relato y vuelves al Mysterious Stranger.\n\nHay dos tipos de puzle: (1) tres secuencias de cuatro símbolos —gira los pilares hasta coincidir de izquierda a derecha y confirma en el altar; (2) líneas con totales («8 seguidores», «4 barcos») —la suma de los bloques debe igualar el número, respetando el orden si un símbolo distinto abre la línea.",
+          "tips": [
+            "Asigna un pilar por pirata antes de encender los braseros.",
+            "No hace falta girar los pilares de izquierda a derecha: solo el resultado final cuenta.",
+            "Los símbolos exactos cambian en cada partida; el libro es la única solución válida."
+          ]
+        },
+        {
+          "id": "step-6",
+          "title": "Medallones y el artefacto",
+          "sketch": "chest",
+          "content": "Tras las tres secuencias, el altar muestra un mapa de la isla con un círculo brillante: un <strong>Medallón</strong>. Excava, derrota a los esqueletos de coral y vuelve al altar. Repite tres veces.\n\nCon los tres medallones aparece el <strong>Rompevelos</strong> entre los pilares centrales. Cógelo y corre al barco: spawnean más esqueletos de coral.",
+          "tips": [
+            "No sueltes un medallón bajo el agua en cuevas: puede flotar hasta el techo y perderse.",
+            "Compara el mapa del altar con la forma de la isla y con pinturas o hitos cercanos.",
+            "Al coger el artefacto desbloqueas «La llave de la aventura»."
+          ]
+        },
+        {
+          "id": "step-7",
+          "title": "Entregar el Rompevelos",
+          "sketch": "island",
+          "content": "Vuelve a cualquier Mysterious Stranger con el artefacto. Completar el relato otorga la condecoración <strong>El Rompevelos</strong>.\n\nEl artefacto aún necesita cuatro piedras: el Extraño te envía con Madame Olivia en <strong>Plunder Outpost</strong>, donde empieza la siguiente Tall Tale: <em>The Cursed Rogue</em>.",
+          "tips": [
+            "Repite el relato 5 veces para «Footsteps of the Pirate Lord» y el camino a los cañones del Magpie's Wing.",
+            "Hay 5 diarios de Mercia repartidos por el mar para «Mercia's Lost Memories».",
+            "Si pierdes el tótem: en la mesa de mapas puedes proponer el checkpoint del capítulo."
           ]
         }
       ],
       "checklist": [
-        { "id": "tt1-start", "label": "Empezar la Tall Tale en un Outpost" },
-        { "id": "tt1-book", "label": "Recoger y leer el diario completo" },
-        { "id": "tt1-island", "label": "Encontrar la isla de la pista" },
-        { "id": "tt1-artifact", "label": "Recuperar el artefacto" },
-        { "id": "tt1-finish", "label": "Entregar y completar la Tall Tale" }
+        { "id": "tt1-start", "label": "Votar el relato con el Mysterious Stranger" },
+        { "id": "tt1-n13", "label": "Recoger el diario del Ala de la Urraca en N13" },
+        { "id": "tt1-chest", "label": "Encontrar y abrir el Cofre Antiguo" },
+        { "id": "tt1-vault", "label": "Colocar el tótem y abrir la Bóveda Antigua" },
+        { "id": "tt1-puzzle", "label": "Resolver el puzle de pilares sin ahogarse" },
+        { "id": "tt1-medals", "label": "Excavar los 3 medallones" },
+        { "id": "tt1-artifact", "label": "Recuperar el Rompevelos" },
+        { "id": "tt1-finish", "label": "Entregar el artefacto al Mysterious Stranger" }
       ],
       "translations": {
         "en": {
           "title": "The Shroudbreaker",
-          "summary": "First page of the voyage toward the Shores of Gold. Follow the journal and recover the artifact.",
+          "summary": "First Tall Tale of Shores of Gold. Recover the Magpie's Wing log, the Totem, open the Ancient Vault and hand in the Shroudbreaker.",
           "steps": [
             {
               "id": "step-1",
-              "title": "The stranger in the tavern",
+              "title": "Starting the tale",
               "sketch": "skull",
-              "content": "In any <strong>Outpost</strong> tavern waits the Mysterious Stranger. Speak with him, vote the tale and pick up the book from the table.\n\nKeep the journal aboard: every drawing is a clue.",
+              "content": "In any <strong>Outpost</strong> tavern, speak with the Mysterious Stranger. Beside him is the Tall Tale book: vote the voyage with your crew.\n\nThe book joins the map radial. Listen to the Stranger: you seek the <strong>Shroudbreaker</strong>, hidden in an Ancient Vault. You need a Totem; the Totem is in an Ancient Chest; the chest is found via the Pirate Lord's ship log.",
               "tips": [
-                "The book appears in the map radial menu.",
-                "Read every page before setting sail."
+                "Do not sail before reading the first pages.",
+                "You can start this Tall Tale from any Outpost."
               ]
             },
             {
               "id": "step-2",
-              "title": "Clues on the water",
-              "sketch": "map",
-              "content": "Compare the journal illustrations with the island shapes on the map table. When the drawing matches, dock and search the marked place.\n\nDig where the clue points.",
+              "title": "Magpie's Wing ship log",
+              "sketch": "ship",
+              "content": "The book says the log sank with the <strong>Magpie's Wing</strong> on an uncharted island between Twisted Spire and Crook's Hollow: coordinates <strong>N13</strong>.\n\nMark N13 on the map table. Look for a small isle with a bright red plant. Northwest has an optional journal (commendations). Dive on that side to the captain's cabin and take the ship log—new pages join your book.",
               "tips": [
-                "Rotate the book: sometimes the drawing is oriented differently from the map.",
-                "Ruins and carved stones are often the key spot."
+                "Finding the log unlocks «The Lost Voyage».",
+                "More journals sit at Plunder, Thieves' Haven, Devil's Ridge and Ancient Spire for full commendations."
               ]
             },
             {
               "id": "step-3",
-              "title": "The artifact and the return",
-              "sketch": "key",
-              "content": "Solve the final riddle of the artifact. With the trophy in hand, return to the Mysterious Stranger and close the tale.",
+              "title": "The Ancient Chest",
+              "sketch": "map",
+              "content": "The new pages cover the Magpie's Wing fleeing the Burning Blade. The Pirate Lord threw the chest overboard: the log gives a starting island, bearings and descriptions.\n\nTrace the route on the map table. Named islands are landmarks, not always the drop. The chest glows underwater a few metres off the stated shore (north/south; «up» ≈ north, «down» ≈ south).\n\nOpen it aboard for the <strong>Totem</strong> and pages that point to the vault.",
               "tips": [
-                "If you get stuck, check whether the book gained new pages."
+                "Island chain → often Snake Island; fortified isle → a Fort; high arches → Thieves' Haven; shallow islets → Old Salts Atoll or similar.",
+                "Common chest isles: Paradise Spring, Snake Island, Devil's Ridge, Lookout Point, Chicken Isle, Fool's Lagoon, Cutlass Cay."
+              ]
+            },
+            {
+              "id": "step-4",
+              "title": "Totem and Ancient Vault",
+              "sketch": "key",
+              "content": "Each totem opens a different vault. Your book gives the clue; if needed:\n\n• Boar → Devil's Ridge\n• Crab → uncharted N13\n• Moon → Crescent Isle\n• Scarab → Crook's Hollow\n• Snake → Mermaid's Hideaway\n• Shark → Kraken's Fall\n\nThe «lock» is a flat rock with a square recess. Hold the totem and walk nearby until «Place Totem» appears.",
+              "tips": [
+                "Devil's Ridge: south-east beach, boar paintings; lock to the left.",
+                "N13: swim by the red plant (west) into the cave; lock behind the workbench.",
+                "Crescent Isle: north cave of the hollow centre.",
+                "Crook's Hollow: south cave behind the waterfall, scarab paintings.",
+                "Mermaid's Hideaway: north-west arch; vault opens east after placing.",
+                "Kraken's Fall: under the main arch, north, near shark paintings."
+              ]
+            },
+            {
+              "id": "step-5",
+              "title": "Vault puzzle",
+              "sketch": "compass",
+              "content": "Inside is an altar with four braziers. <strong>Do not light them yet</strong>: study the last book page (the solution).\n\nLighting the altar floods the room. One chance only—dying fails the tale and sends you back to the Mysterious Stranger.\n\nTwo puzzle types: (1) three sequences of four symbols—rotate pillars left-to-right to match, then confirm on the altar; (2) lines with totals («8 followers», «4 ships»)—block sums must match while keeping order if a different symbol starts the line.",
+              "tips": [
+                "Assign one pillar per pirate before lighting braziers.",
+                "Pillars need not be spun in order—only the final row matters.",
+                "Exact symbols change each run; trust only your book."
+              ]
+            },
+            {
+              "id": "step-6",
+              "title": "Medallions and the artifact",
+              "sketch": "chest",
+              "content": "After three sequences, the altar shows an island map with a glowing circle: a <strong>Vault Medallion</strong>. Dig, clear coral skeletons, return it. Repeat three times.\n\nWith all three, the <strong>Shroudbreaker</strong> appears between the middle pillars. Grab it and run for the ship—more coral skeletons spawn.",
+              "tips": [
+                "Do not drop a medallion underwater in caves: it can float to the ceiling and soft-lock.",
+                "Match the altar sketch to the island shape and nearby rock art.",
+                "Claiming the artifact unlocks «The Key to Adventure»."
+              ]
+            },
+            {
+              "id": "step-7",
+              "title": "Return the Shroudbreaker",
+              "sketch": "island",
+              "content": "Take the artifact to any Mysterious Stranger. Finishing grants the <strong>Shroudbreaker</strong> commendation.\n\nFour stones are still missing: the Stranger points you to Madame Olivia at <strong>Plunder Outpost</strong> for the next Tall Tale: <em>The Cursed Rogue</em>.",
+              "tips": [
+                "Complete the tale 5 times for «Footsteps of the Pirate Lord» toward Magpie's Wing cannons.",
+                "Five Mercia journals unlock «Mercia's Lost Memories».",
+                "Lost the totem? Propose the chapter checkpoint on the map table."
               ]
             }
           ],
           "checklist": [
-            { "id": "tt1-start", "label": "Start the Tall Tale at an Outpost" },
-            { "id": "tt1-book", "label": "Pick up and read the full journal" },
-            { "id": "tt1-island", "label": "Find the clue island" },
-            { "id": "tt1-artifact", "label": "Recover the artifact" },
-            { "id": "tt1-finish", "label": "Hand in and complete the Tall Tale" }
+            { "id": "tt1-start", "label": "Vote the tale with the Mysterious Stranger" },
+            { "id": "tt1-n13", "label": "Recover the Magpie's Wing log at N13" },
+            { "id": "tt1-chest", "label": "Find and open the Ancient Chest" },
+            { "id": "tt1-vault", "label": "Place the totem and open the Ancient Vault" },
+            { "id": "tt1-puzzle", "label": "Solve the pillar puzzle without drowning" },
+            { "id": "tt1-medals", "label": "Dig up all 3 medallions" },
+            { "id": "tt1-artifact", "label": "Recover the Shroudbreaker" },
+            { "id": "tt1-finish", "label": "Hand the artifact to the Mysterious Stranger" }
           ]
         }
       }

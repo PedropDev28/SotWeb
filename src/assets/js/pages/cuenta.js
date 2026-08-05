@@ -16,7 +16,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const providerLabel =
     session.provider === 'google'
       ? t('account.providerGoogle')
-      : t('account.providerLocal');
+      : session.provider === 'discord'
+        ? t('account.providerDiscord')
+        : t('account.providerLocal');
 
   profile.innerHTML = `
     <div class="user-chip" style="margin-bottom: 1.25rem;">
@@ -31,7 +33,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         <strong style="display:block; font-family: var(--font-display);">${esc(
           session.name
         )}</strong>
-        <span style="opacity:.7; font-size:.9rem;">${esc(session.email)}</span>
+        <span style="opacity:.7; font-size:.9rem;">${esc(
+          session.email || (session.provider === 'discord' ? 'Discord' : session.provider)
+        )}</span>
       </div>
     </div>
     <p style="margin-bottom: 1rem; opacity:.75;">

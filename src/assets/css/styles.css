@@ -705,17 +705,7 @@ main > .hero:first-child {
   align-items: start;
 }
 
-/* â€”â€” Libro de Grandes Relatos (estilo Tale Book) â€”â€” */
-body.tale-view {
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(60, 28, 12, 0.45), transparent 55%),
-    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(0, 0, 0, 0.7), transparent 50%),
-    linear-gradient(180deg, #0a0402 0%, #120806 45%, #080302 100%);
-}
-
-body.tale-view .site-footer {
-  opacity: 0.55;
-}
+/* Legacy tale-view: sin override de fondo (bg único en todas las páginas) */
 
 .tale-stage {
   width: min(1180px, 100%);
@@ -2267,4 +2257,409 @@ body.tale-view .site-footer {
     transform: none !important;
     animation: none !important;
   }
+
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
+
+/* —— Guía walkthrough —— */
+.walk-layout {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  grid-template-columns: minmax(0, 1fr) 300px;
+}
+
+.walk-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.walk-toolbar .back-link {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.walk-hero {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.walk-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--brass);
+  margin: 0.65rem 0 0.75rem;
+  line-height: 1.15;
+}
+
+.walk-summary {
+  max-width: 62ch;
+  color: rgba(243, 230, 200, 0.82);
+  font-size: 1.08rem;
+}
+
+.walk-cover-sketch,
+.walk-sketch {
+  margin-top: 1rem;
+  max-width: 140px;
+  opacity: 0.7;
+  color: var(--brass);
+}
+
+.walk-cover-sketch svg,
+.walk-sketch svg {
+  width: 100%;
+  height: auto;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.walk-toc {
+  margin-bottom: 1.75rem;
+}
+
+.walk-toc h2 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 0.85rem;
+}
+
+.walk-toc ol {
+  display: grid;
+  gap: 0.35rem;
+  counter-reset: none;
+}
+
+.walk-toc a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius);
+  color: var(--sand);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.walk-toc a:hover {
+  background: rgba(232, 162, 58, 0.1);
+  color: var(--brass);
+}
+
+.toc-num {
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  color: var(--brass);
+}
+
+.walk-step {
+  margin-bottom: 1.75rem;
+  padding: 1.35rem 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(20, 8, 5, 0.45);
+  scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+
+.walk-step-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 0.45rem;
+}
+
+.walk-step-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  color: var(--sand);
+  margin-bottom: 0.85rem;
+}
+
+.walk-body {
+  color: rgba(243, 230, 200, 0.9);
+}
+
+.walk-body p + p {
+  margin-top: 0.75rem;
+}
+
+.walk-tips {
+  margin-top: 1.1rem;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--brass);
+  background: rgba(232, 162, 58, 0.08);
+}
+
+.walk-tips h3 {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--brass);
+  margin-bottom: 0.45rem;
+}
+
+.walk-tips ul {
+  list-style: disc;
+  padding-left: 1.2rem;
+  color: rgba(243, 230, 200, 0.85);
+}
+
+.walk-step-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.walk-aside {
+  position: sticky;
+  top: calc(var(--nav-h) + 1rem);
+}
+
+.walk-checklist {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.walk-check {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.45rem 0.35rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s var(--ease);
+}
+
+.walk-check:hover {
+  background: rgba(232, 162, 58, 0.08);
+}
+
+.walk-check.done span {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+.walk-check.check-pop {
+  animation: checkPop 0.45s var(--ease);
+}
+
+.muted {
+  color: rgba(243, 230, 200, 0.72);
+}
+
+/* Editor */
+.editor-wrap {
+  width: min(860px, 100%);
+  margin: 0 auto;
+}
+
+.editor-hero h1 {
+  font-family: var(--font-display);
+  color: var(--brass);
+  font-size: 1.7rem;
+  margin-bottom: 0.35rem;
+}
+
+.editor-form {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.editor-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.editor-section-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--brass);
+}
+
+.editor-step {
+  margin-bottom: 0.85rem;
+}
+
+.editor-step-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.editor-check-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.editor-check-row input {
+  flex: 1;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+.auth-oauth .btn-discord {
+  margin-bottom: 0.25rem;
+}
+
+/* Review */
+.review-layout {
+  width: min(860px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.review-steps,
+.review-checks {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 1.1rem;
+  list-style: decimal;
+}
+
+.review-checks {
+  list-style: disc;
+}
+
+.review-step-preview {
+  margin-top: 0.25rem;
+  font-size: 0.92rem;
+}
+
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Atmosphere / pirate motion */
+.site-embers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.ember-particle {
+  position: absolute;
+  left: var(--x);
+  bottom: -10px;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffb040 0%, #ff5a00 55%, transparent 70%);
+  opacity: 0.55;
+  animation: emberRise var(--t) linear var(--d) infinite;
+  filter: blur(0.2px);
+}
+
+.logo-sway {
+  animation: logoSway 5.5s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes emberRise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(calc((var(--i) - 8) * 6px), -110vh, 0) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes logoSway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2.4deg);
+  }
+}
+
+@keyframes checkPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.04);
+    background: rgba(232, 162, 58, 0.16);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+body > *:not(.site-embers) {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 900px) {
+  .walk-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .walk-aside {
+    position: static;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
