@@ -359,6 +359,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         summary: '',
         steps: [{ id: 'step-1', title: '', content: '', tips: [] }],
         checklist: [],
+        commendations: [],
       };
       paint();
     });
@@ -516,6 +517,37 @@ document.addEventListener('DOMContentLoaded', async () => {
               .join('')}
           </div>
         </div>
+        <div class="panel editor-section">
+          <div class="editor-section-head">
+            <h2>${esc(t('editor.commendations'))}</h2>
+            <button type="button" class="btn btn-ghost" id="g-add-comm">${esc(t('editor.addCommendation'))}</button>
+          </div>
+          <div id="g-comms">
+            ${(g.commendations || [])
+              .map(
+                (c, i) => `
+              <div class="editor-comm panel" data-i="${i}">
+                <div class="editor-step-head">
+                  <strong>${esc(t('editor.commendations'))} ${i + 1}</strong>
+                  <button type="button" class="btn btn-ghost btn-sm" data-rm-comm>${esc(t('editor.remove'))}</button>
+                </div>
+                <div class="form-group">
+                  <label>${esc(t('editor.commTitle'))}</label>
+                  <input data-comm="title" type="text" value="${esc(c.title || '')}">
+                </div>
+                <div class="form-group">
+                  <label>${esc(t('editor.commDesc'))}</label>
+                  <textarea data-comm="description" rows="2">${esc(c.description || '')}</textarea>
+                </div>
+                <div class="form-group">
+                  <label>${esc(t('editor.commHint'))}</label>
+                  <input data-comm="hint" type="text" value="${esc(c.hint || '')}">
+                </div>
+              </div>`
+              )
+              .join('')}
+          </div>
+        </div>
       </div>
       <input type="file" id="guide-image-picker" accept="image/*,.gif" hidden>
     `;
@@ -583,6 +615,14 @@ document.addEventListener('DOMContentLoaded', async () => {
           label: el.querySelector('[data-check]').value.trim(),
         }))
         .filter((c) => c.label);
+      g.commendations = [...document.querySelectorAll('#g-comms .editor-comm')]
+        .map((el, i) => ({
+          id: g.commendations?.[i]?.id || `comm-${i + 1}`,
+          title: el.querySelector('[data-comm="title"]').value.trim(),
+          description: el.querySelector('[data-comm="description"]').value.trim(),
+          hint: el.querySelector('[data-comm="hint"]').value.trim(),
+        }))
+        .filter((c) => c.title);
     }
 
     document.getElementById('back-guides')?.addEventListener('click', () => {
@@ -604,6 +644,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       paint();
     });
 
+    document.getElementById('g-add-comm')?.addEventListener('click', () => {
+      collectGuide();
+      g.commendations = g.commendations || [];
+      g.commendations.push({
+        id: `comm-${g.commendations.length + 1}`,
+        title: '',
+        description: '',
+        hint: '',
+      });
+      paint();
+    });
+
     view.querySelectorAll('[data-rm-step]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const i = Number(btn.closest('[data-i]')?.dataset.i);
@@ -618,6 +670,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const i = Number(btn.closest('[data-i]')?.dataset.i);
         collectGuide();
         g.checklist.splice(i, 1);
+        paint();
+      });
+    });
+
+    view.querySelectorAll('[data-rm-comm]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const i = Number(btn.closest('[data-i]')?.dataset.i);
+        collectGuide();
+        g.commendations.splice(i, 1);
         paint();
       });
     });

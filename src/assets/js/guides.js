@@ -85,6 +85,9 @@
       id: base.id,
       steps: Array.isArray(overlay.steps) ? overlay.steps : base.steps,
       checklist: Array.isArray(overlay.checklist) ? overlay.checklist : base.checklist,
+      commendations: Array.isArray(overlay.commendations)
+        ? overlay.commendations
+        : base.commendations,
     };
   }
 

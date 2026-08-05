@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       : { checked: {} };
 
     const steps = guide.steps || [];
+    const commendations = guide.commendations || [];
     const cat = window.SOTI18n?.categoryLabel?.(guide.category) || guide.category || '';
     const diff = window.SOTI18n?.difficultyLabel?.(guide.difficulty) || guide.difficulty || '';
 
@@ -59,10 +60,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         .join('') || `<p class="muted"><em>${t('guide.emptyChecklist')}</em></p>`;
     }
 
+    function commendationsSideHtml() {
+      if (!commendations.length) return '';
+      return `
+        <div class="walk-comm-aside">
+          <h4>${t('guide.commendationsTitle')}</h4>
+          <p class="muted" id="comm-progress-label"></p>
+          <div class="checklist walk-checklist" id="side-commendations">
+            ${commendations
+              .map((item) => {
+                const checked = !!progress.checked?.[item.id];
+                return `
+                  <label class="walk-check ${checked ? 'done' : ''}">
+                    <input
+                      type="checkbox"
+                      data-item="${SOTGuides.escapeHtml(item.id)}"
+                      ${checked ? 'checked' : ''}
+                      ${session ? '' : 'disabled'}
+                    >
+                    <span>${SOTGuides.escapeHtml(item.title || item.label || '')}</span>
+                  </label>`;
+              })
+              .join('')}
+          </div>
+        </div>`;
+    }
+
     function updateProgressUi() {
       const stats = session
         ? SOTProgress.getGuideStats(session.id, guide)
-        : { done: 0, total: (guide.checklist || []).length, percent: 0 };
+        : {
+            done: 0,
+            total: (guide.checklist || []).length + commendations.length,
+            percent: 0,
+          };
       const label = document.getElementById('progress-label');
       const fill = document.getElementById('progress-fill');
       if (label) {
@@ -71,14 +102,26 @@ document.addEventListener('DOMContentLoaded', async () => {
           : t('guide.loginToSave');
       }
       if (fill) fill.style.width = `${stats.percent}%`;
+
+      const commLabel = document.getElementById('comm-progress-label');
+      if (commLabel && commendations.length) {
+        const cStats = session
+          ? SOTProgress.getCommendationStats(session.id, guide)
+          : { done: 0, total: commendations.length };
+        commLabel.textContent = `${cStats.done} / ${cStats.total}`;
+      }
     }
 
     const stats = session
       ? SOTProgress.getGuideStats(session.id, guide)
-      : { done: 0, total: (guide.checklist || []).length, percent: 0 };
+      : {
+          done: 0,
+          total: (guide.checklist || []).length + commendations.length,
+          percent: 0,
+        };
 
-    const toc = steps
-      .map(
+    const toc = [
+      ...steps.map(
         (step, i) => `
         <li>
           <a href="#step-${SOTGuides.escapeHtml(step.id || String(i + 1))}">
@@ -86,8 +129,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             ${SOTGuides.escapeHtml(step.title)}
           </a>
         </li>`
-      )
-      .join('');
+      ),
+      ...(commendations.length
+        ? [
+            `<li>
+              <a href="#commendations">
+                <span class="toc-num">★</span>
+                ${t('guide.commendationsTitle')}
+              </a>
+            </li>`,
+          ]
+        : []),
+    ].join('');
 
     const stepsHtml = steps
       .map((step, i) => {
@@ -97,6 +150,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           .join('');
         const prev = i > 0 ? steps[i - 1] : null;
         const next = i < steps.length - 1 ? steps[i + 1] : null;
+        const lastLink = commendations.length
+          ? `<a class="btn" href="#commendations">${t('guide.toCommendations')}</a>`
+          : `<a class="btn" href="#checklist">${t('guide.toChecklist')}</a>`;
         return `
           <article class="walk-step reveal-on-scroll" id="step-${SOTGuides.escapeHtml(sid)}">
             <header class="walk-step-head">
@@ -123,13 +179,58 @@ document.addEventListener('DOMContentLoaded', async () => {
               ${
                 next
                   ? `<a class="btn" href="#step-${SOTGuides.escapeHtml(next.id || String(i + 2))}">${t('guide.nextStep')}</a>`
-                  : `<a class="btn" href="#checklist">${t('guide.toChecklist')}</a>`
+                  : lastLink
               }
             </nav>
           </article>
         `;
       })
       .join('');
+
+    const commendationsHtml = commendations.length
+      ? `
+      <section class="walk-commendations panel reveal-on-scroll" id="commendations">
+        <header class="walk-step-head">
+          <span class="walk-step-badge">${t('guide.commendationsBadge')}</span>
+          <h2>${t('guide.commendationsTitle')}</h2>
+        </header>
+        <p class="muted">${t('guide.commendationsLead')}</p>
+        <div class="comm-grid">
+          ${commendations
+            .map((item) => {
+              const checked = !!progress.checked?.[item.id];
+              return `
+                <article class="comm-card ${checked ? 'done' : ''}">
+                  <label class="comm-card-check">
+                    <input
+                      type="checkbox"
+                      data-item="${SOTGuides.escapeHtml(item.id)}"
+                      ${checked ? 'checked' : ''}
+                      ${session ? '' : 'disabled'}
+                    >
+                    <span class="comm-card-body">
+                      <strong>${SOTGuides.escapeHtml(item.title || '')}</strong>
+                      ${
+                        item.description
+                          ? `<p>${SOTGuides.escapeHtml(item.description)}</p>`
+                          : ''
+                      }
+                      ${
+                        item.hint
+                          ? `<p class="comm-hint">${SOTGuides.escapeHtml(item.hint)}</p>`
+                          : ''
+                      }
+                    </span>
+                  </label>
+                </article>`;
+            })
+            .join('')}
+        </div>
+        <nav class="walk-step-nav">
+          <a class="btn btn-ghost" href="#checklist">${t('guide.toChecklist')}</a>
+        </nav>
+      </section>`
+      : '';
 
     root.innerHTML = `
       <div class="guide-layout walk-layout">
@@ -166,6 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
           <div class="walk-steps">
             ${stepsHtml}
+            ${commendationsHtml}
           </div>
         </div>
 
@@ -182,6 +284,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <span id="progress-fill" style="width:${stats.percent}%"></span>
           </div>
           <div class="checklist walk-checklist" id="side-checklist">${checklistHtml()}</div>
+          ${commendationsSideHtml()}
           ${
             session
               ? ''
@@ -191,6 +294,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
+    updateProgressUi();
+
     if (session) {
       root.addEventListener('change', (e) => {
         const input = e.target.closest('input[type="checkbox"][data-item]');
@@ -198,8 +303,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         SOTProgress.setChecked(session.id, guide.id, input.dataset.item, input.checked);
         progress.checked[input.dataset.item] = input.checked;
         updateProgressUi();
+        root.querySelectorAll(`input[data-item="${input.dataset.item}"]`).forEach((box) => {
+          box.checked = input.checked;
+          box.closest('label')?.classList.toggle('done', input.checked);
+          box.closest('.comm-card')?.classList.toggle('done', input.checked);
+        });
         const label = input.closest('label');
-        label?.classList.toggle('done', input.checked);
         label?.classList.add('check-pop');
         setTimeout(() => label?.classList.remove('check-pop'), 450);
       });

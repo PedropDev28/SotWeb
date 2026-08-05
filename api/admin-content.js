@@ -119,6 +119,14 @@ function sanitizeGuide(patch = {}) {
           label: String(item.label || '').slice(0, 300),
         }))
       : [],
+    commendations: Array.isArray(patch.commendations)
+      ? patch.commendations.slice(0, 40).map((item, i) => ({
+          id: String(item.id || `comm-${i + 1}`).slice(0, 80),
+          title: String(item.title || item.label || '').slice(0, 200),
+          description: String(item.description || '').slice(0, 1000),
+          hint: String(item.hint || '').slice(0, 500),
+        }))
+      : [],
   };
 }
 

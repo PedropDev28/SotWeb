@@ -33,7 +33,16 @@
   }
 
   function getGuideStats(userId, guide) {
-    const items = guide.checklist || [];
+    const items = [...(guide.checklist || []), ...(guide.commendations || [])];
+    const progress = getGuideProgress(userId, guide.id);
+    const done = items.filter((item) => progress.checked?.[item.id]).length;
+    const total = items.length;
+    const percent = total ? Math.round((done / total) * 100) : 0;
+    return { done, total, percent };
+  }
+
+  function getCommendationStats(userId, guide) {
+    const items = guide.commendations || [];
     const progress = getGuideProgress(userId, guide.id);
     const done = items.filter((item) => progress.checked?.[item.id]).length;
     const total = items.length;
@@ -69,6 +78,7 @@
     getGuideProgress,
     setChecked,
     getGuideStats,
+    getCommendationStats,
     getOverallStats,
   };
 })();

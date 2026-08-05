@@ -49,6 +49,32 @@
         .join('');
     }
 
+    function commendationFields() {
+      return (draft.commendations || [])
+        .map(
+          (item, i) => `
+        <div class="editor-comm panel" data-comm-index="${i}">
+          <div class="editor-step-head">
+            <strong>${esc(t('editor.commendations'))} ${i + 1}</strong>
+            <button type="button" class="btn btn-ghost btn-sm" data-remove-comm>${t('editor.remove')}</button>
+          </div>
+          <div class="form-group">
+            <label>${esc(t('editor.commTitle'))}</label>
+            <input type="text" data-comm-title value="${esc(item.title || '')}">
+          </div>
+          <div class="form-group">
+            <label>${esc(t('editor.commDesc'))}</label>
+            <textarea rows="2" data-comm-desc>${esc(item.description || '')}</textarea>
+          </div>
+          <div class="form-group">
+            <label>${esc(t('editor.commHint'))}</label>
+            <input type="text" data-comm-hint value="${esc(item.hint || '')}">
+          </div>
+        </div>`
+        )
+        .join('');
+    }
+
     function paint() {
       root.innerHTML = `
         <div class="editor-wrap">
@@ -101,6 +127,14 @@
               <div id="checks-host">${checklistFields()}</div>
             </div>
 
+            <div class="editor-section panel">
+              <div class="editor-section-head">
+                <h2>${t('editor.commendations')}</h2>
+                <button type="button" class="btn btn-ghost" id="add-comm">${t('editor.addCommendation')}</button>
+              </div>
+              <div id="comms-host">${commendationFields()}</div>
+            </div>
+
             <p class="form-msg" id="editor-msg"></p>
             <button type="submit" class="btn btn-block">${t('editor.submit')}</button>
           </form>
@@ -138,6 +172,16 @@
           label: el.querySelector('[data-check-label]').value.trim(),
         };
       }).filter((c) => c.label);
+
+      draft.commendations = [...document.querySelectorAll('[data-comm-index]')].map((el, i) => {
+        const prev = draft.commendations?.[i] || {};
+        return {
+          id: prev.id || `comm-${i + 1}`,
+          title: el.querySelector('[data-comm-title]').value.trim(),
+          description: el.querySelector('[data-comm-desc]').value.trim(),
+          hint: el.querySelector('[data-comm-hint]').value.trim(),
+        };
+      }).filter((c) => c.title);
     }
 
     function bind() {
@@ -161,6 +205,18 @@
         paint();
       });
 
+      document.getElementById('add-comm')?.addEventListener('click', () => {
+        collect();
+        draft.commendations = draft.commendations || [];
+        draft.commendations.push({
+          id: `comm-${draft.commendations.length + 1}`,
+          title: '',
+          description: '',
+          hint: '',
+        });
+        paint();
+      });
+
       root.querySelectorAll('[data-remove-step]').forEach((btn) => {
         btn.addEventListener('click', () => {
           const idx = Number(btn.closest('.editor-step')?.dataset.stepIndex);
@@ -175,6 +231,15 @@
           const idx = Number(btn.closest('.editor-check-row')?.dataset.checkIndex);
           collect();
           draft.checklist.splice(idx, 1);
+          paint();
+        });
+      });
+
+      root.querySelectorAll('[data-remove-comm]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.closest('[data-comm-index]')?.dataset.commIndex);
+          collect();
+          draft.commendations.splice(idx, 1);
           paint();
         });
       });

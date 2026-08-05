@@ -1,5 +1,5 @@
 {
-  "_comentario": "Añade guías con id, title, category, difficulty, summary, steps[], checklist[]. Opcional: coverSketch, step.sketch y translations.en para inglés.",
+  "_comentario": "Añade guías con id, title, category, difficulty, summary, steps[], checklist[], commendations[]. Opcional: coverSketch, step.sketch y translations.en.",
   "guides": [
     {
       "id": "tall-tale-shroudbreaker",
@@ -97,6 +97,38 @@
         { "id": "tt1-artifact", "label": "Recuperar el Rompevelos" },
         { "id": "tt1-finish", "label": "Entregar el artefacto al Mysterious Stranger" }
       ],
+      "commendations": [
+        {
+          "id": "tt1-comm-shroudbreaker",
+          "title": "El Rompevelos",
+          "description": "Completa el Gran Relato El Rompevelos.",
+          "hint": "Entrégalo al Mysterious Stranger."
+        },
+        {
+          "id": "tt1-comm-lost-voyage",
+          "title": "El viaje perdido",
+          "description": "Encuentra el diario de a bordo del Ala de la Urraca.",
+          "hint": "Islote N13, camarote del capitán."
+        },
+        {
+          "id": "tt1-comm-key",
+          "title": "La llave de la aventura",
+          "description": "Recupera el artefacto Rompevelos de la Bóveda Antigua.",
+          "hint": "Tras colocar los tres medallones."
+        },
+        {
+          "id": "tt1-comm-footsteps",
+          "title": "Pasos del Señor Pirata",
+          "description": "Completa El Rompevelos cinco veces.",
+          "hint": "Desbloquea el camino a los cañones del Magpie's Wing."
+        },
+        {
+          "id": "tt1-comm-mercia",
+          "title": "Recuerdos perdidos de Mercia",
+          "description": "Encuentra los cinco diarios de Mercia repartidos por el mar.",
+          "hint": "Plunder, Thieves' Haven, Devil's Ridge, Ancient Spire y más."
+        }
+      ],
       "translations": {
         "en": {
           "title": "The Shroudbreaker",
@@ -189,6 +221,38 @@
             { "id": "tt1-medals", "label": "Dig up all 3 medallions" },
             { "id": "tt1-artifact", "label": "Recover the Shroudbreaker" },
             { "id": "tt1-finish", "label": "Hand the artifact to the Mysterious Stranger" }
+          ],
+          "commendations": [
+            {
+              "id": "tt1-comm-shroudbreaker",
+              "title": "The Shroudbreaker",
+              "description": "Complete The Shroudbreaker Tall Tale.",
+              "hint": "Hand it in to the Mysterious Stranger."
+            },
+            {
+              "id": "tt1-comm-lost-voyage",
+              "title": "The Lost Voyage",
+              "description": "Find the Magpie's Wing ship log.",
+              "hint": "Uncharted isle N13, captain's cabin."
+            },
+            {
+              "id": "tt1-comm-key",
+              "title": "The Key to Adventure",
+              "description": "Recover the Shroudbreaker artifact from the Ancient Vault.",
+              "hint": "After placing all three medallions."
+            },
+            {
+              "id": "tt1-comm-footsteps",
+              "title": "Footsteps of the Pirate Lord",
+              "description": "Complete The Shroudbreaker five times.",
+              "hint": "Unlocks the path to Magpie's Wing cannons."
+            },
+            {
+              "id": "tt1-comm-mercia",
+              "title": "Mercia's Lost Memories",
+              "description": "Find all five Mercia journals across the seas.",
+              "hint": "Plunder, Thieves' Haven, Devil's Ridge, Ancient Spire and more."
+            }
           ]
         }
       }
