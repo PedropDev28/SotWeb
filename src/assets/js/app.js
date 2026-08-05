@@ -12,6 +12,7 @@
     const session = window.SOTAuth?.getSession();
     const authLink = document.querySelector('[data-auth-link]');
     const accountLink = document.querySelector('[data-account-link]');
+    const adminLink = document.querySelector('[data-admin-link]');
 
     if (authLink) {
       if (session) {
@@ -33,6 +34,11 @@
 
     if (accountLink) {
       accountLink.classList.toggle('hidden', !session);
+    }
+
+    if (adminLink) {
+      const isAdmin = !!(session && window.SOTAuth?.isAdmin?.(session));
+      adminLink.classList.toggle('hidden', !isAdmin);
     }
   }
 

@@ -1,12 +1,15 @@
 /**
  * Almacén gratis vía GitHub Contents API (sin Vercel Blob).
- * Env: GITHUB_TOKEN (obligatorio), GITHUB_REPO (default PedropDev28/SotWeb), GITHUB_BRANCH (default main)
+ * Env: GITHUB_TOKEN, GITHUB_REPO (default PedropDev28/SotWeb), GITHUB_BRANCH (default main)
  */
 
 const DEFAULT_REPO = 'PedropDev28/SotWeb';
 const DEFAULT_BRANCH = 'main';
 const OVERLAY_PATH = 'data/runtime/overlays.json';
 const PROPOSALS_DIR = 'data/runtime/proposals';
+const PAGES_DIR = 'data/runtime/pages';
+const PAGES_INDEX = 'data/runtime/pages/index.json';
+const UPLOADS_DIR = 'data/runtime/uploads';
 
 function githubConfig() {
   const token = process.env.GITHUB_TOKEN || '';
@@ -17,6 +20,11 @@ function githubConfig() {
 
 function isConfigured() {
   return Boolean(githubConfig().token);
+}
+
+function publicFileUrl(path) {
+  const { repo, branch } = githubConfig();
+  return `https://cdn.jsdelivr.net/gh/${repo}@${branch}/${path}`;
 }
 
 function apiHeaders(token) {
@@ -42,7 +50,7 @@ async function getFile(path) {
   const data = await res.json();
   if (Array.isArray(data)) return { type: 'dir', entries: data };
   const content = Buffer.from(data.content || '', 'base64').toString('utf8');
-  return { type: 'file', sha: data.sha, content, path: data.path };
+  return { type: 'file', sha: data.sha, content, path: data.path, encoding: data.encoding };
 }
 
 async function putFile(path, content, message) {
@@ -52,7 +60,10 @@ async function putFile(path, content, message) {
   const existing = await getFile(path);
   const body = {
     message,
-    content: Buffer.from(typeof content === 'string' ? content : JSON.stringify(content, null, 2), 'utf8').toString('base64'),
+    content: Buffer.from(
+      typeof content === 'string' ? content : JSON.stringify(content, null, 2),
+      'utf8'
+    ).toString('base64'),
     branch,
   };
   if (existing?.type === 'file' && existing.sha) body.sha = existing.sha;
@@ -70,6 +81,67 @@ async function putFile(path, content, message) {
   return res.json();
 }
 
+/** contentBase64: already base64 (no data: prefix) */
+async function putBinaryFile(path, contentBase64, message) {
+  const { token, repo, branch } = githubConfig();
+  if (!token) throw new Error('github_not_configured');
+
+  let sha;
+  const existingRes = await fetch(
+    `https://api.github.com/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`,
+    { headers: apiHeaders(token) }
+  );
+  if (existingRes.ok) {
+    const existing = await existingRes.json();
+    sha = existing.sha;
+  }
+
+  const body = {
+    message,
+    content: contentBase64,
+    branch,
+  };
+  if (sha) body.sha = sha;
+
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { ...apiHeaders(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`github_put_failed:${res.status}:${text.slice(0, 180)}`);
+  }
+  const data = await res.json();
+  const sha = data.commit?.sha || branch;
+  return {
+    ...data,
+    publicUrl: `https://cdn.jsdelivr.net/gh/${repo}@${sha}/${path}`,
+    rawUrl: `https://raw.githubusercontent.com/${repo}/${branch}/${path}`,
+    path,
+  };
+}
+
+async function deleteFile(path, message) {
+  const { token, repo, branch } = githubConfig();
+  if (!token) throw new Error('github_not_configured');
+  const existing = await getFile(path);
+  if (!existing || existing.type !== 'file') return null;
+
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: { ...apiHeaders(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, sha: existing.sha, branch }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`github_delete_failed:${res.status}:${text.slice(0, 180)}`);
+  }
+  return res.json();
+}
+
 async function readOverlays() {
   try {
     const file = await getFile(OVERLAY_PATH);
@@ -83,7 +155,7 @@ async function readOverlays() {
 }
 
 async function writeOverlays(data) {
-  await putFile(OVERLAY_PATH, data, 'chore: actualizar overlays de guías aprobadas');
+  await putFile(OVERLAY_PATH, data, 'chore: actualizar overlays de guías');
 }
 
 async function findProposal(id) {
@@ -126,20 +198,82 @@ async function listPendingProposals() {
         });
       }
     } catch {
-      /* skip broken */
+      /* skip */
     }
   }
   pending.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   return pending;
 }
 
+async function readPagesIndex() {
+  try {
+    const file = await getFile(PAGES_INDEX);
+    if (!file || file.type !== 'file') return { pages: [] };
+    const data = JSON.parse(file.content || '{}');
+    return { pages: Array.isArray(data.pages) ? data.pages : [] };
+  } catch {
+    return { pages: [] };
+  }
+}
+
+async function writePagesIndex(index) {
+  await putFile(PAGES_INDEX, index, 'chore: índice de páginas del sitio');
+}
+
+async function readPage(id) {
+  const file = await getFile(`${PAGES_DIR}/${id}.json`);
+  if (!file || file.type !== 'file') return null;
+  try {
+    return JSON.parse(file.content);
+  } catch {
+    return null;
+  }
+}
+
+async function savePage(page) {
+  await putFile(`${PAGES_DIR}/${page.id}.json`, page, `chore: página ${page.id}`);
+  const index = await readPagesIndex();
+  const meta = {
+    id: page.id,
+    title: page.title,
+    slug: page.slug || page.id,
+    published: !!page.published,
+    updatedAt: page.updatedAt,
+  };
+  const i = index.pages.findIndex((p) => p.id === page.id);
+  if (i >= 0) index.pages[i] = meta;
+  else index.pages.push(meta);
+  index.pages.sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
+  await writePagesIndex(index);
+  return page;
+}
+
+async function deletePage(id) {
+  await deleteFile(`${PAGES_DIR}/${id}.json`, `chore: borrar página ${id}`);
+  const index = await readPagesIndex();
+  index.pages = index.pages.filter((p) => p.id !== id);
+  await writePagesIndex(index);
+}
+
 module.exports = {
   isConfigured,
+  githubConfig,
+  publicFileUrl,
+  getFile,
+  putFile,
+  putBinaryFile,
+  deleteFile,
   readOverlays,
   writeOverlays,
   findProposal,
   saveProposal,
   listPendingProposals,
+  readPagesIndex,
+  readPage,
+  savePage,
+  deletePage,
   OVERLAY_PATH,
   PROPOSALS_DIR,
+  PAGES_DIR,
+  UPLOADS_DIR,
 };

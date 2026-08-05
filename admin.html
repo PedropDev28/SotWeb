@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="account.title">Mi cuenta — Los Indomables</title>
+  <title data-i18n="admin.title">Admin — Los Indomables</title>
   <link rel="stylesheet" href="./src/assets/css/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body>
   <header class="site-header">
@@ -33,31 +34,12 @@
 
   <main>
     <div class="page-hero">
-      <h1 data-i18n="account.heading">Mi cuenta</h1>
-      <p data-i18n="account.lead">Perfil de la flota y estadísticas reales de Sea of Thieves.</p>
+      <h1 data-i18n="admin.heading">Panel del capitán</h1>
+      <p data-i18n="admin.lead">Edita páginas, guías y sube imágenes o GIFs sin tocar el código.</p>
     </div>
 
-    <section class="section" style="padding-top: 0;">
-      <div class="account-grid">
-        <aside class="panel" id="profile-panel">
-          <div class="empty-state" data-i18n="account.loading">Cargando…</div>
-        </aside>
-        <div class="account-main">
-          <div id="pirate-profile" class="pirate-profile">
-            <div class="empty-state" data-i18n="account.loading">Cargando…</div>
-          </div>
-
-          <div class="stat-row" id="stats-row"></div>
-          <div class="panel">
-            <h2 class="account-subheading" data-i18n="account.progressByGuide">
-              Progreso por guía
-            </h2>
-            <div class="guide-grid" id="account-guides">
-              <div class="empty-state" data-i18n="account.loading">Cargando…</div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <section class="section admin-section" id="admin-root">
+      <div class="empty-state" data-i18n="admin.loading">Cargando panel…</div>
     </section>
   </main>
 
@@ -72,14 +54,13 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
   <script src="./src/assets/js/config.js"></script>
   <script src="./src/assets/js/i18n.js"></script>
   <script src="./src/assets/js/auth.js"></script>
-  <script src="./src/assets/js/progress.js"></script>
   <script src="./src/assets/js/guides.js"></script>
-  <script src="./src/assets/js/sot-stats.js"></script>
-  <script src="./src/assets/js/app.js"></script>
   <script src="./src/assets/js/atmosphere.js"></script>
-  <script src="./src/assets/js/pages/cuenta.js"></script>
+  <script src="./src/assets/js/app.js"></script>
+  <script src="./src/assets/js/pages/admin.js"></script>
 </body>
 </html>

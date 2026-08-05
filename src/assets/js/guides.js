@@ -95,9 +95,12 @@
     const data = await res.json();
     const base = Array.isArray(data.guides) ? data.guides : [];
     const overlays = await loadOverlays();
-    cache = base.map((guide) => mergeGuide(guide, overlays[guide.id]));
-    // Guías nuevas solo en overlay (aprobadas sin estar en JSON base)
+    cache = base
+      .map((guide) => mergeGuide(guide, overlays[guide.id]))
+      .filter((guide) => !overlays[guide.id]?.deleted);
+    // Guías nuevas solo en overlay (aprobadas / creadas por admin)
     Object.keys(overlays).forEach((id) => {
+      if (overlays[id]?.deleted) return;
       if (!cache.find((g) => g.id === id) && overlays[id]?.title) {
         cache.push(overlays[id]);
       }

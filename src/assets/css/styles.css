@@ -2663,3 +2663,137 @@ body > *:not(.site-embers) {
   }
 }
 
+/* —— Admin + CMS pages —— */
+.admin-section {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.admin-shell {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-toolbar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.admin-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.admin-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.admin-card h3 {
+  font-family: var(--font-display);
+  color: var(--brass);
+  margin-bottom: 0.25rem;
+}
+
+.admin-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.quill-host {
+  min-height: 320px;
+  background: #f7f0e2;
+  color: #1a120a;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.quill-host .ql-editor {
+  min-height: 280px;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.ql-toolbar.ql-snow {
+  background: rgba(20, 8, 5, 0.9);
+  border-color: var(--line) !important;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.ql-container.ql-snow {
+  border-color: var(--line) !important;
+}
+
+.admin-media-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+}
+
+.cms-wrap {
+  width: min(860px, 100%);
+  margin: 0 auto;
+}
+
+.cms-header h1 {
+  font-family: var(--font-display);
+  color: var(--brass);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin: 1rem 0 1.25rem;
+}
+
+.cms-body {
+  color: rgba(243, 230, 200, 0.92);
+}
+
+.cms-body .ql-editor {
+  padding: 0;
+  overflow: visible;
+  color: inherit;
+  font-family: var(--font-body);
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.cms-body .ql-editor img,
+.cms-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+  box-shadow: var(--shadow);
+}
+
+.cms-body .ql-editor video,
+.cms-body video {
+  max-width: 100%;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+
+.cms-body .ql-editor p,
+.cms-body p {
+  margin-bottom: 0.85rem;
+}
+
+.cms-body .ql-editor h1,
+.cms-body .ql-editor h2,
+.cms-body .ql-editor h3 {
+  font-family: var(--font-display);
+  color: var(--brass);
+  margin: 1.25rem 0 0.65rem;
+}
+
+
