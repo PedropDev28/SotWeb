@@ -2396,8 +2396,21 @@ main > .hero:first-child {
   margin-bottom: 0.85rem;
 }
 
-.walk-body {
-  color: rgba(243, 230, 200, 0.9);
+.walk-body img,
+.walk-body video {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+  box-shadow: var(--shadow);
+}
+
+.quill-step {
+  min-height: 200px;
+}
+
+.quill-step .ql-editor {
+  min-height: 160px;
 }
 
 .walk-body p + p {

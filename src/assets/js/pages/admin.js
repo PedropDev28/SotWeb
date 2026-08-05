@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let pages = [];
   let guides = [];
   let quill = null;
+  let stepQuills = [];
   let editingPageId = null;
   let editingGuide = null;
 
@@ -388,8 +389,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  function mountStepQuill(host, html, onImageRequest) {
+    const editor = new Quill(host, {
+      theme: 'snow',
+      placeholder: t('admin.editorPlaceholder'),
+      modules: {
+        toolbar: {
+          container: [
+            [{ header: [2, 3, false] }],
+            ['bold', 'italic', 'underline'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['link', 'image'],
+            ['clean'],
+          ],
+          handlers: {
+            image: () => onImageRequest(editor),
+          },
+        },
+      },
+    });
+    editor.root.innerHTML = html || '<p></p>';
+    return editor;
+  }
+
+  async function insertMediaIntoQuill(editor, file) {
+    setMsg(t('admin.uploading'));
+    const url = await uploadFile(file);
+    const range = editor.getSelection(true) || { index: editor.getLength() };
+    if (file.type.startsWith('image/')) {
+      editor.insertEmbed(range.index, 'image', url, 'user');
+      editor.setSelection(range.index + 1);
+    } else if (file.type.startsWith('video/')) {
+      editor.insertEmbed(range.index, 'video', url, 'user');
+    } else {
+      editor.insertText(range.index, file.name, 'link', url, 'user');
+    }
+    setMsg(t('admin.uploaded'), 'success');
+  }
+
   function renderGuideEditor(view) {
     const g = editingGuide;
+    stepQuills = [];
+
     view.innerHTML = `
       <div class="admin-toolbar">
         <button type="button" class="btn btn-ghost" id="back-guides">${esc(t('admin.back'))}</button>
@@ -425,6 +466,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <h2>${esc(t('editor.steps'))}</h2>
             <button type="button" class="btn btn-ghost" id="g-add-step">${esc(t('editor.addStep'))}</button>
           </div>
+          <p class="muted" style="margin-bottom:0.85rem;">${esc(t('admin.guideStepsHint'))}</p>
           <div id="g-steps">
             ${(g.steps || [])
               .map(
@@ -440,7 +482,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
                 <div class="form-group">
                   <label>${esc(t('editor.stepContent'))}</label>
-                  <textarea data-f="content" rows="5">${esc(step.content || '')}</textarea>
+                  <div class="quill-host quill-step" data-quill-step="${i}"></div>
+                  <div class="admin-media-bar">
+                    <label class="btn btn-ghost btn-sm">
+                      ${esc(t('admin.insertImage'))}
+                      <input type="file" data-step-image="${i}" accept="image/*,.gif" hidden>
+                    </label>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label>${esc(t('editor.stepTips'))}</label>
@@ -469,7 +517,48 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
       </div>
+      <input type="file" id="guide-image-picker" accept="image/*,.gif" hidden>
     `;
+
+    const imagePicker = document.getElementById('guide-image-picker');
+    let pendingQuill = null;
+
+    (g.steps || []).forEach((step, i) => {
+      const host = view.querySelector(`[data-quill-step="${i}"]`);
+      if (!host || !window.Quill) return;
+      stepQuills[i] = mountStepQuill(host, step.content || '', (editor) => {
+        pendingQuill = editor;
+        imagePicker?.click();
+      });
+    });
+
+    imagePicker?.addEventListener('change', async () => {
+      const file = imagePicker.files?.[0];
+      imagePicker.value = '';
+      if (!file || !pendingQuill) return;
+      try {
+        await insertMediaIntoQuill(pendingQuill, file);
+      } catch (err) {
+        setMsg(err.message, 'error');
+      } finally {
+        pendingQuill = null;
+      }
+    });
+
+    view.querySelectorAll('[data-step-image]').forEach((input) => {
+      input.addEventListener('change', async () => {
+        const file = input.files?.[0];
+        input.value = '';
+        const idx = Number(input.dataset.stepImage);
+        const editor = stepQuills[idx];
+        if (!file || !editor) return;
+        try {
+          await insertMediaIntoQuill(editor, file);
+        } catch (err) {
+          setMsg(err.message, 'error');
+        }
+      });
+    });
 
     function collectGuide() {
       g.title = document.getElementById('g-title').value.trim();
@@ -481,7 +570,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         id: g.steps?.[i]?.id || `step-${i + 1}`,
         sketch: g.steps?.[i]?.sketch || '',
         title: el.querySelector('[data-f="title"]').value.trim(),
-        content: el.querySelector('[data-f="content"]').value.trim(),
+        content: stepQuills[i] ? stepQuills[i].root.innerHTML : '',
         tips: el
           .querySelector('[data-f="tips"]')
           .value.split('\n')
@@ -498,12 +587,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('back-guides')?.addEventListener('click', () => {
       editingGuide = null;
+      stepQuills = [];
       paint();
     });
 
     document.getElementById('g-add-step')?.addEventListener('click', () => {
       collectGuide();
-      g.steps.push({ id: `step-${g.steps.length + 1}`, title: '', content: '', tips: [] });
+      g.steps.push({ id: `step-${g.steps.length + 1}`, title: '', content: '<p></p>', tips: [] });
       paint();
     });
 
@@ -542,6 +632,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setMsg(t('admin.saving'));
         await adminPost({ action: 'saveGuide', guide: g });
         editingGuide = null;
+        stepQuills = [];
         SOTGuides.clearCache();
         await refreshData();
         setMsg(t('admin.savedGuide'), 'success');

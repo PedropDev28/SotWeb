@@ -107,7 +107,7 @@ function sanitizeGuide(patch = {}) {
           id: String(step.id || `step-${i + 1}`).slice(0, 80),
           title: String(step.title || '').slice(0, 200),
           sketch: String(step.sketch || '').slice(0, 40),
-          content: String(step.content || '').slice(0, 12000),
+          content: String(step.content || '').slice(0, 200_000),
           tips: Array.isArray(step.tips)
             ? step.tips.slice(0, 20).map((tip) => String(tip).slice(0, 500))
             : [],

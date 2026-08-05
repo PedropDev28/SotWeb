@@ -215,6 +215,8 @@
       'admin.insertImage': 'Insertar imagen / GIF',
       'admin.insertFile': 'Subir archivo / vídeo',
       'admin.confirmDelete': '¿Seguro que quieres borrar esto?',
+      'admin.guideStepsHint':
+        'En cada paso puedes formatear texto e insertar imágenes o GIFs (icono de imagen o el botón de abajo).',
 
       'page.title': 'Página — Los Indomables',
       'page.loading': 'Cargando página…',
@@ -512,6 +514,8 @@
       'admin.insertImage': 'Insert image / GIF',
       'admin.insertFile': 'Upload file / video',
       'admin.confirmDelete': 'Are you sure you want to delete this?',
+      'admin.guideStepsHint':
+        'In each step you can format text and insert images or GIFs (image icon or the button below).',
 
       'page.title': 'Page — Los Indomables',
       'page.loading': 'Loading page…',
