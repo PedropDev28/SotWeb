@@ -47,7 +47,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       headers,
       body: JSON.stringify({ ...body, author: authorPayload() }),
     });
-    const data = await res.json().catch(() => ({}));
+    const text = await res.text();
+    let data = {};
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch {
+      throw new Error(
+        text?.slice(0, 160) || t('admin.error')
+      );
+    }
     if (!res.ok) throw new Error(data.message || data.error || t('admin.error'));
     return data;
   }
@@ -68,10 +76,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function refreshData() {
-    const [pagesRes] = await Promise.all([
-      fetch(`${api}?type=pages`, { cache: 'no-store' }).then((r) => r.json()),
-    ]);
-    pages = pagesRes.pages || [];
+    const pagesRes = await fetch(`${api}?type=pages`, { cache: 'no-store' });
+    const pagesText = await pagesRes.text();
+    let pagesJson = { pages: [] };
+    try {
+      pagesJson = pagesText ? JSON.parse(pagesText) : { pages: [] };
+    } catch {
+      throw new Error(pagesText?.slice(0, 160) || t('admin.error'));
+    }
+    if (!pagesRes.ok) {
+      throw new Error(pagesJson.message || pagesJson.error || t('admin.error'));
+    }
+    pages = pagesJson.pages || [];
     SOTGuides.clearCache();
     guides = await SOTGuides.loadGuides();
   }

@@ -4,7 +4,7 @@
  */
 
 const { randomUUID } = require('crypto');
-const store = require('./lib/github-store');
+const store = require('../lib/github-store');
 
 const MAX_UPLOAD_BYTES = 4.5 * 1024 * 1024;
 
@@ -15,6 +15,7 @@ function cors(res) {
 }
 
 function parseBody(req) {
+  if (req.body && typeof req.body === 'object') return Promise.resolve(req.body);
   return new Promise((resolve, reject) => {
     let data = '';
     req.on('data', (chunk) => {
@@ -36,6 +37,10 @@ function parseBody(req) {
 }
 
 function json(res, status, data) {
+  if (typeof res.status === 'function' && typeof res.json === 'function') {
+    res.status(status).json(data);
+    return;
+  }
   res.statusCode = status;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.end(JSON.stringify(data));

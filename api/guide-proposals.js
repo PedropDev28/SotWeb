@@ -5,7 +5,7 @@
  */
 
 const { randomBytes, randomUUID, createHash } = require('crypto');
-const store = require('./lib/github-store');
+const store = require('../lib/github-store');
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

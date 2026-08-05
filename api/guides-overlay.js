@@ -3,7 +3,7 @@
  * Env: GITHUB_TOKEN (opcional para lectura; si falta, devuelve vacío)
  */
 
-const store = require('./lib/github-store');
+const store = require('../lib/github-store');
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
