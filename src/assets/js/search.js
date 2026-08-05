@@ -214,20 +214,19 @@
   function ensureUi() {
     if (document.getElementById('site-search-root')) return;
 
-    const nav = document.querySelector('.nav-links');
-    if (nav && !document.querySelector('[data-search-toggle]')) {
-      const li = document.createElement('li');
-      li.className = 'nav-search-item';
-      li.innerHTML = `
-        <button type="button" class="nav-search-btn" data-search-toggle aria-label="${esc(
-          t('search.open')
-        )}">
-          <span aria-hidden="true">⌕</span>
-          <span class="nav-search-label">${esc(t('search.open'))}</span>
-        </button>`;
-      const account = nav.querySelector('[data-account-link]')?.closest('li');
-      if (account) nav.insertBefore(li, account);
-      else nav.appendChild(li);
+    const actions = document.getElementById('nav-actions');
+    if (actions && !document.querySelector('[data-search-toggle]')) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'nav-search-btn';
+      btn.setAttribute('data-search-toggle', '');
+      btn.setAttribute('aria-label', t('search.open'));
+      btn.innerHTML =
+        '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" ' +
+        'stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
+        '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>' +
+        `<span class="nav-search-label">${esc(t('search.open'))}</span>`;
+      actions.insertBefore(btn, actions.firstChild);
     }
 
     const root = document.createElement('div');

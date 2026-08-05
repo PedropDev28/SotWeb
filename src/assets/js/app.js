@@ -16,9 +16,11 @@
 
     if (authLink) {
       if (session) {
-        authLink.textContent = t('nav.logout');
+        authLink.textContent = t('nav.logoutShort');
         authLink.removeAttribute('data-i18n');
         authLink.href = '#';
+        authLink.classList.remove('nav-cta');
+        authLink.classList.add('nav-link-quiet');
         authLink.onclick = (e) => {
           e.preventDefault();
           window.SOTAuth.logout();
@@ -28,6 +30,8 @@
         authLink.textContent = t('nav.login');
         authLink.setAttribute('data-i18n', 'nav.login');
         authLink.href = 'auth.html';
+        authLink.classList.add('nav-cta');
+        authLink.classList.remove('nav-link-quiet');
         authLink.onclick = null;
       }
     }
@@ -54,10 +58,17 @@
 
   function setupMobileNav() {
     const toggle = document.querySelector('.nav-toggle');
-    const links = document.querySelector('.nav-links');
-    if (!toggle || !links) return;
+    const shell = document.querySelector('.nav-shell');
+    if (!toggle || !shell) return;
     toggle.addEventListener('click', () => {
-      links.classList.toggle('open');
+      const open = shell.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', (e) => {
+      if (!shell.classList.contains('open')) return;
+      if (e.target.closest('.nav-shell') || e.target.closest('.nav-toggle')) return;
+      shell.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
     });
   }
 

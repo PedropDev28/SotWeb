@@ -14,6 +14,8 @@
       'nav.discord': 'Discord',
       'nav.account': 'Mi cuenta',
       'nav.login': 'Entrar',
+      'nav.logoutShort': 'Salir',
+      'nav.accountShort': 'Cuenta',
       'nav.logout': 'Cerrar sesión',
       'nav.openMenu': 'Abrir menú',
       'nav.lang': 'Idioma',
@@ -344,6 +346,8 @@
       'nav.discord': 'Discord',
       'nav.account': 'My account',
       'nav.login': 'Sign in',
+      'nav.logoutShort': 'Sign out',
+      'nav.accountShort': 'Account',
       'nav.logout': 'Sign out',
       'nav.openMenu': 'Open menu',
       'nav.lang': 'Language',
@@ -743,20 +747,20 @@
   }
 
   function mountSwitcher() {
-    const nav = document.querySelector('.nav-links');
-    if (!nav || nav.querySelector('[data-lang-switch]')) return;
+    const actions = document.getElementById('nav-actions');
+    if (!actions || actions.querySelector('[data-lang-switch]')) return;
 
-    const li = document.createElement('li');
-    li.className = 'lang-switch-item';
-    li.innerHTML = `
+    const wrap = document.createElement('div');
+    wrap.className = 'lang-switch-wrap';
+    wrap.innerHTML = `
       <div class="lang-switch" data-lang-switch role="group" aria-label="${t('nav.lang')}">
         <button type="button" class="lang-btn" data-lang="es" aria-pressed="false">ES</button>
         <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
       </div>
     `;
-    nav.appendChild(li);
+    actions.appendChild(wrap);
 
-    li.addEventListener('click', (e) => {
+    wrap.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-lang]');
       if (!btn) return;
       const next = btn.getAttribute('data-lang');

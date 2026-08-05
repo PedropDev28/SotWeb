@@ -25,15 +25,20 @@
       <button class="nav-toggle" type="button" data-i18n-attr="aria-label:nav.openMenu" aria-label="Abrir menú">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
-        <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
-        <li><a href="guias.html" data-i18n="nav.guides">Guías</a></li>
-        <li><a href="index.html#novedades" data-i18n="nav.news">Novedades</a></li>
-        <li><a href="#" data-discord-link data-i18n="nav.discord">Discord</a></li>
-        <li><a href="admin.html" data-admin-link class="hidden" data-i18n="nav.admin">Admin</a></li>
-        <li><a href="cuenta.html" data-account-link class="hidden" data-i18n="nav.account">Mi cuenta</a></li>
-        <li><a href="auth.html" data-auth-link data-i18n="nav.login">Entrar</a></li>
-      </ul>
+      <div class="nav-shell">
+        <ul class="nav-links nav-primary">
+          <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
+          <li><a href="guias.html" data-i18n="nav.guides">Guías</a></li>
+          <li><a href="index.html#novedades" data-i18n="nav.news">Novedades</a></li>
+        </ul>
+        <div class="nav-actions" id="nav-actions">
+          <ul class="nav-session">
+            <li><a href="admin.html" data-admin-link class="hidden nav-link-quiet" data-i18n="nav.admin">Admin</a></li>
+            <li><a href="cuenta.html" data-account-link class="hidden nav-cta nav-cta--soft" data-i18n="nav.accountShort">Cuenta</a></li>
+            <li><a href="auth.html" data-auth-link class="nav-cta" data-i18n="nav.login">Entrar</a></li>
+          </ul>
+        </div>
+      </div>
     </nav>
   </header>
 
