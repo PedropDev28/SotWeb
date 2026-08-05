@@ -125,6 +125,7 @@ function sanitizeGuide(patch = {}) {
           title: String(item.title || item.label || '').slice(0, 200),
           description: String(item.description || '').slice(0, 1000),
           hint: String(item.hint || '').slice(0, 500),
+          image: String(item.image || '').slice(0, 500),
         }))
       : [],
   };

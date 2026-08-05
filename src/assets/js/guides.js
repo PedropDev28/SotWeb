@@ -111,8 +111,39 @@
     return cache.map((g) => window.SOTI18n?.localizeItem?.(g) || g);
   }
 
-  function clearCache() {
-    cache = null;
+  function stripHtml(str) {
+    return String(str || '')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function guideSearchBlob(guide) {
+    const parts = [
+      guide.title,
+      guide.summary,
+      guide.category,
+      guide.difficulty,
+      guide.id,
+    ];
+    (guide.steps || []).forEach((step) => {
+      parts.push(step.title, stripHtml(step.content), ...(step.tips || []));
+    });
+    (guide.checklist || []).forEach((item) => parts.push(item.label));
+    (guide.commendations || []).forEach((item) => {
+      parts.push(item.title, item.description, item.hint);
+    });
+    return parts.filter(Boolean).join(' ').toLowerCase();
+  }
+
+  function matchesQuery(guide, query) {
+    const q = String(query || '').trim().toLowerCase();
+    if (!q) return true;
+    const hay = guideSearchBlob(guide);
+    return q
+      .split(/\s+/)
+      .filter(Boolean)
+      .every((token) => hay.includes(token));
   }
 
   function getGuideById(guides, id) {

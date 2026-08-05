@@ -209,6 +209,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                       ${session ? '' : 'disabled'}
                     >
                     <span class="comm-card-body">
+                      ${
+                        item.image
+                          ? `<img class="comm-card-img" src="${SOTGuides.escapeHtml(
+                              item.image
+                            )}" alt="" loading="lazy">`
+                          : ''
+                      }
                       <strong>${SOTGuides.escapeHtml(item.title || '')}</strong>
                       ${
                         item.description

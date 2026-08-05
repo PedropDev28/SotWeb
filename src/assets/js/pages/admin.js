@@ -543,6 +543,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                   <label>${esc(t('editor.commHint'))}</label>
                   <input data-comm="hint" type="text" value="${esc(c.hint || '')}">
                 </div>
+                <div class="form-group">
+                  <label>${esc(t('editor.commImage'))}</label>
+                  <div class="admin-comm-image">
+                    <input data-comm="image" type="url" value="${esc(c.image || '')}" placeholder="https://…">
+                    ${
+                      c.image
+                        ? `<img class="comm-edit-preview" src="${esc(c.image)}" alt="">`
+                        : ''
+                    }
+                    <label class="btn btn-ghost btn-sm">
+                      ${esc(t('admin.insertImage'))}
+                      <input type="file" data-comm-upload="${i}" accept="image/*,.gif" hidden>
+                    </label>
+                  </div>
+                </div>
               </div>`
               )
               .join('')}
@@ -621,6 +636,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           title: el.querySelector('[data-comm="title"]').value.trim(),
           description: el.querySelector('[data-comm="description"]').value.trim(),
           hint: el.querySelector('[data-comm="hint"]').value.trim(),
+          image: el.querySelector('[data-comm="image"]').value.trim(),
         }))
         .filter((c) => c.title);
     }
@@ -652,8 +668,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         title: '',
         description: '',
         hint: '',
+        image: '',
       });
       paint();
+    });
+
+    view.querySelectorAll('[data-comm-upload]').forEach((input) => {
+      input.addEventListener('change', async () => {
+        const file = input.files?.[0];
+        input.value = '';
+        const idx = Number(input.dataset.commUpload);
+        const row = view.querySelector(`#g-comms .editor-comm[data-i="${idx}"]`);
+        const urlInput = row?.querySelector('[data-comm="image"]');
+        if (!file || !urlInput) return;
+        try {
+          setMsg(t('admin.uploading'));
+          const url = await uploadFile(file);
+          urlInput.value = url;
+          collectGuide();
+          paint();
+          setMsg(t('admin.uploaded'), 'success');
+        } catch (err) {
+          setMsg(err.message, 'error');
+        }
+      });
     });
 
     view.querySelectorAll('[data-rm-step]').forEach((btn) => {

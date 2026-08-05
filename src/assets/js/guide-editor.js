@@ -70,6 +70,10 @@
             <label>${esc(t('editor.commHint'))}</label>
             <input type="text" data-comm-hint value="${esc(item.hint || '')}">
           </div>
+          <div class="form-group">
+            <label>${esc(t('editor.commImage'))}</label>
+            <input type="url" data-comm-image value="${esc(item.image || '')}" placeholder="https://…">
+          </div>
         </div>`
         )
         .join('');
@@ -180,6 +184,7 @@
           title: el.querySelector('[data-comm-title]').value.trim(),
           description: el.querySelector('[data-comm-desc]').value.trim(),
           hint: el.querySelector('[data-comm-hint]').value.trim(),
+          image: el.querySelector('[data-comm-image]')?.value.trim() || prev.image || '',
         };
       }).filter((c) => c.title);
     }
@@ -213,6 +218,7 @@
           title: '',
           description: '',
           hint: '',
+          image: '',
         });
         paint();
       });

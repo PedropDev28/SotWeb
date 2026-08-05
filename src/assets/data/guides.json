@@ -102,7 +102,8 @@
           "id": "tt1-comm-shroudbreaker",
           "title": "El Rompevelos",
           "description": "Completa el Gran Relato El Rompevelos.",
-          "hint": "Entrégalo al Mysterious Stranger."
+          "hint": "Entrégalo al Mysterious Stranger.",
+          "image": "./src/assets/img/rompevelo.png"
         },
         {
           "id": "tt1-comm-lost-voyage",
@@ -227,7 +228,8 @@
               "id": "tt1-comm-shroudbreaker",
               "title": "The Shroudbreaker",
               "description": "Complete The Shroudbreaker Tall Tale.",
-              "hint": "Hand it in to the Mysterious Stranger."
+              "hint": "Hand it in to the Mysterious Stranger.",
+              "image": "./src/assets/img/rompevelo.png"
             },
             {
               "id": "tt1-comm-lost-voyage",
